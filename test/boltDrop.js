@@ -22,7 +22,8 @@ var Action_Methods = {
 
   //读取文件
   ReadFile:()=>{
-    let Filesdata = fs.readFileSync('testdemo1.xlsx');
+    // let Filesdata = fs.readFileSync('testdemo1.xlsx');
+    let Filesdata = fs.readFileSync('Tokenbig.xlsx');
     logger.info("读取文件成功");
     //返回
     return Filesdata;
@@ -131,7 +132,8 @@ var Action_Methods = {
         result.ValidData.push(rows);
         //分开追加数据
         result.sData.address.push(data[i][0]);
-        result.sData.value.push( parseInt(data[i][1]+'00000000'));
+        console.log(parseInt(data[i][1]*100000000));
+        result.sData.value.push(parseInt(data[i][1]*100000000));
       }
       //数据处理完成后，返回参数
       //处理完标志

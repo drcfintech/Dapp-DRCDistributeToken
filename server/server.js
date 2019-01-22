@@ -8,6 +8,7 @@ const render = require('koa-art-template');
 const path = require('path');
 const views = require('koa-views');
 const cors = require('@koa/cors');
+const convert = require('koa-convert');
 const HDWalletProvider = require('truffle-hdwallet-provider');
 //
 const walletConfig = require('./walletConfig.json');
@@ -18,6 +19,8 @@ const UR_Contract_addresss = require('../contractAbi/Contract_addresss.json');
 const UR_DrcAirDrop = require('../contractAbi/DrcAirDrop.json');
 const UR_DrcToken = require('../contractAbi/DrcToken.json');
 //init
+//handle request entity too large
+
 const app = new Koa();
 var web3 = new Web3();
 //init contractname
@@ -70,25 +73,17 @@ var Actions_Koa = {
     // app.use(async ctx => {
     //   ctx.body = ctx.request.body;
     // });
-    app.use(bodyParser());
-//     app.use( ctx => {
-// ctx.body = ctx.request.body;
-// });
-// app.use('*', function(req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-//     res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-//     res.header("X-Powered-By",' 3.2.1')
-//     res.header("Content-Type", "application/json;charset=utf-8");
-//     next();
-// });
-
+    app.use(convert(bodyParser({
+        enableTypes:['json', 'form', 'text'],
+        formLimit:"10mb",
+        queryString:{
+        parameterLimit:100000000000000
+      }
+    })));
     app.use(cors());
     app.use(router.routes());
     app.use(router.allowedMethods());
     app.use(bodyParser());
-
-
     app.listen(3003, () => {
       console.log("start at port 3003");
     });
@@ -852,7 +847,7 @@ var Actions_Router = {
     });
   },
   router_post: () => {
-
+    //
     router.post('/', (ctx, next) => {
       // TODO:
       ctx.body = "测试路由111";
@@ -992,6 +987,42 @@ var Actions_Router = {
       ctx.body = "D_multiSendandself";
     });
     /**  @ 空投合约 -批量投放代币*/
+
+    //
+
+    router.post('/Drop/D_multiSend_te', async (ctx, next) => {
+      // TODO:
+      ctx.body = "D_multiSend_te";
+      // TODO:
+      let data = ctx.request.body;
+      // console.log("post请求-----D_multiSend_te", data.data);
+      // console.log("post请求-----D_multiSend_te", data);
+      //  01. TODO:校验数据
+        let cData = data.data;
+      // console.log("----------------",cData,cData.length,typeof (cData));
+
+       // for(var i in cData){
+       //   console.log("00",i,cData[i].A,"B=",cData[i].B);
+       // }
+      let resultData = Actions_Web3jsUtils.web3_postVerifiCation_big(cData);
+      // console.log("web3_postVerifiCation返回数据是：", resultData);
+      //调用 合约方法
+      // TODO:校验数据
+      // let sFrom = Json_list. ;
+      deploy = async (data, next) => {
+        let result = await Actions_Contrant_Drop.D_multiSend_ed({
+          data
+        });
+        console.log("1111=>", result);
+        return result;
+      }
+      //结果返回
+      deploy(resultData).then(res => {
+        ctx.body = "调用tranfer结果是=>" + res;
+      });
+      return cData;
+    });
+    //
     router.post('/Drop/D_multiSend', (ctx, next) => {
       // TODO:
       ctx.body = "D_multiSend";
@@ -1350,8 +1381,238 @@ var Actions_Web3jsUtils = {
       }
       return result;
   },
+  //工具函数@ post 0121 处理大表单数据分片以及数据校验 4052
+  web3_postVerifiCation_big: (data) => {
+    //输出
+    let param = data;
+    console.log("web3_postVerifiCation_big..................................");
+    //结果处理对象
+    let result = {
+      State: 0, //0 1 3
+      Tote: 0,
+      Valid: 0,
+      UnValid: 0,
+      ValidData: [],
+      UnValidData: [],
+      Bz: [],
+      sData:{
+        address:[],
+        value:[],
+        state:[]
+      }
+    }
 
-  web3_currentProvider: () => {
+    // 01. 首先判断数据长度
+    // if (data.length <= 0) {
+    //   result.State = 3; //
+    //   return result;
+    // }
+    //01. 判断数据是否为空
+
+    //02. 判断地址和内容是否为空
+/*    for (let i in param) {
+      //01.首先判断2个参数都为空
+      if ((param[i].A == null || param[i].address == undefined || param[i].address == '') && (param[i].value == null || param[i].value == undefined || param[i].value == '')) {
+        //01.如果两位数据都是空
+        result.UnValid += 1;
+        //对象保存 序号：数据
+
+        let rows = {
+          no: +param[i].no,
+          address: param[i].address,
+          value: param[i].value,
+          state: Json_list.STATES_PAR.notAddressandValue.toString()
+        }
+        // let cData = {i:param[i].no,param[i].address,param[i].value,Json_list.STATES_PAR.CheckPass}};
+        result.UnValidData.push(rows);
+        //
+        continue;
+      } else {
+        console.log("411");
+        //02. 判断地址为空的情况
+        if (param[i].address == null || param[i].address == undefined || param[i].address == '') {
+          //
+          console.log("6");
+          result.UnValid += 1;
+          //对象保存 序号：数据
+          let rows = {
+            no: +param[i].no,
+            address: param[i].address,
+            value: param[i].value,
+            state: Json_list.STATES_PAR.notAddress.toString()
+          }
+          result.UnValidData.push(rows);
+          continue;
+        } else if (param[i].value == null || param[i].value == undefined || param[i].value == '') {
+          console.log("5");
+          result.UnValidData += 1;
+          //对象保存 序号：数据
+          let rows = {
+            no: +param[i].no,
+            address: param[i].address,
+            value: param[i].value,
+            state: Json_list.STATES_PAR.notValue.toString()
+          }
+
+          result.UnValidData.push(rows);
+          continue;
+        }
+      }
+      //02. 判断地址是否合法
+
+      if (!web3.isAddress(param[i].address)) {
+        console.log("423");
+        //如果不是有效地址
+        result.UnValid += 1;
+        //对象保存 序号：数据
+        let rows = {
+          no: +param[i].no,
+          address: param[i].address,
+          value: param[i].value,
+          state: Json_list.STATES_PAR.wrongAddress.toString()
+        }
+        result.UnValidData.push(rows);
+        continue;
+      } else {
+        console.log("地址校验通过");
+        //如果是有效地址
+        result.Valid += 1;
+        //对象保存 序号：数据
+        let rows = {
+          no: +param[i].no,
+          address: param[i].address,
+          value: param[i].value,
+          state: Json_list.STATES_PAR.CheckPass.toString()
+        }
+        result.ValidData.push(rows);
+        //分开追加数据
+        result.sData.address.push( param[i].address);
+        result.sData.value.push(  parseInt(param[i].value+'00000000'));
+      }
+      //数据处理完成后，返回参数
+      //处理完标志
+      result.State = 3;
+
+    }*/
+    for (let i in param) {
+     //01.首先判断2个参数都为空
+     if ((param[i].A == null || param[i].A == undefined || param[i].A == '') && (param[i].B == null || param[i].B == undefined || param[i].B == '')) {
+       //01.如果两位数据都是空
+       result.UnValid += 1;
+       //对象保存 序号：数据
+       let rows = {
+         no: i,
+         address: param[i].A,
+         value: param[i].B,
+         state: Json_list.STATES_PAR.notAandB.toString()
+       }
+       // let cData = {i:param[i].no,param[i].A,param[i].B,Json_list.STATES_PAR.CheckPass}};
+       result.UnValidData.push(rows);
+       //
+       continue;
+     } else {
+       //02. 判断地址为空的情况
+       if (param[i].A == null || param[i].A == undefined || param[i].A == '') {
+         result.UnValid += 1;
+         //对象保存 序号：数据
+         let rows = {
+           no: i,
+           address: param[i].A,
+           value: param[i].B,
+           state: Json_list.STATES_PAR.notAddress.toString()
+         }
+         result.UnValidData.push(rows);
+         continue;
+       } else if (param[i].B == null || param[i].B == undefined || param[i].B == '') {
+         result.UnValidData += 1;
+         //对象保存 序号：数据
+         let rows = {
+           no: i,
+           address: param[i].A,
+           value: param[i].B,
+           state: Json_list.STATES_PAR.notValue.toString()
+         }
+         result.UnValidData.push(rows);
+         continue;
+       }
+     }
+     //02. 判断地址是否合法
+     if (!web3.isAddress(param[i].A)) {
+       console.log("第"+i+"合约地址不合法");
+       //如果不是有效地址
+       result.UnValid += 1;
+       //对象保存 序号：数据
+       let rows = {
+         no: i,
+         address: param[i].A,
+         value: param[i].B,
+         state: Json_list.STATES_PAR.wrongAddress.toString()
+       }
+       result.UnValidData.push(rows);
+       continue;
+     } else {
+       // console.log("地址校验通过",i);
+       //如果是有效地址
+       result.Valid += 1;
+       //对象保存 序号：数据
+       let rows = {
+         no: i,
+         address: param[i].A,
+         value: param[i].B,
+         state: Json_list.STATES_PAR.CheckPass.toString()
+       }
+       result.ValidData.push(rows);
+       //分开追加数据
+       result.sData.address.push( param[i].A);
+       // TODO: 转换参数
+       let sNum = (parseFloat(param[i].B).toFixed(8))*1000000000000000000;
+       let value = web3.toBigNumber(sNum);
+       result.sData.value.push(value);
+     }
+     //数据处理完成后，返回参数
+     //处理完标志
+     result.State = 3;
+   }
+
+    return result;
+  },
+  web3_cuttingunitarray: (data) => {
+    // TODO:切割因子
+    console.log("ddddddddddddddddddddddddddddddddd",data);
+    let lengths = 500;
+    let data_length = data.address.length;
+    console.log("长度是",data_length);
+    let arr = [];//临时数组
+    let brr = [];//返回数组
+
+    //首先做一个判断，条数是否相等
+    if (data.address.length != data.value.length){
+        //如果两个参数数量不同，直接返回
+        console.log("参数数量不同");
+          return;
+    }
+
+    //数据处理
+    for(let i=0;i<data_length;i++){
+        //
+        console.log("循环",i);
+          let is = i+1;
+        if(is%lengths==0){
+          //单位切割组装
+          // TODO:
+          //填充切割数组
+          console.log("填装",i);
+          brr.push(arr);
+          //清空临时数组
+          arr = [];
+        }
+        arr.push(i);
+        }
+        console.log("切割后的数组是：=>",brr);
+        return brr;
+  },
+
+  web3_currentProvider: (data) => {
     // TODO:
   }
 }
@@ -1984,6 +2245,101 @@ var Actions_Contrant_Drop = {
     }
     return result;
   },
+  //
+
+  /*方法说明
+   *@method D_multiSend_ed 大文件操作
+   *@for Actions_Contrant_Drop 所属
+   *@param{{1:_destAddrs(address[],2:_valuesmyself(uint256[]))}}参数名 参数说明
+   *@return {1:hash} 返回值说明
+   */
+  D_multiSend_ed: async (data) => {
+    // TODO:
+    let  result;
+    let cData = data;
+    console.log("调用合约方法-Token-D_multiSend...", cData);
+    let parsm = cData.data.sData;
+
+    // console.log("D_multiSend的数据：length4323",parsm.address.length);
+    // console.log("D_multiSend的数据：address4323",parsm.address);
+    // console.log("D_multiSend的数据：value5878",parsm.value);
+
+    // TODO: 数据分片
+    let resusltData =    Actions_Web3jsUtils.web3_cuttingunitarray(parsm);
+    console.log("切割后的数组是:",resusltData);
+    // //参数
+     let resultData ={
+      Sum:0,
+      Normal:0,
+      Unnormal:0,
+      Data:[],
+      unData:[]
+    };
+    //结果集
+    // let Parames_data = {
+    //   Type: {
+    //     param1: "address _form",
+    //     param2: "address _to",
+    //     param3: "uint256 _value"
+    //   },
+    //   Value: {
+    //     param1: data.from,
+    //     param2: data.to,
+    //     param3: data.value
+    //   }
+    // }
+    // // let data;
+    // let Parames_address = {
+    //   //合约地址
+    //   contractAddress: "0x66A4F55B53Cfd0563a16F40BE7EDF8A07796F692",
+    //   //发送者
+    //   fromAddress: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105",
+    //   //调用者
+    //   toAddress: "0xd2580AB2EB3313B0972e9e47b05eE4c15320A6D1"
+    // }
+    // //序列化数据
+    //
+    // let Parames_row = {
+    //   Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
+    //   Tx_gasPrice: web3.toHex(web3.eth.gasPrice),
+    //   Tx_gasLimit: web3.toHex(800000),
+    //   Tx_from: Parames_address.fromAddress,
+    //   Tx_to: Parames_address.contractAddress,
+    //   Tx_value: "0x0",
+    //       //// TODO:
+    //   Tx_data: Contract_Drop.multiSend.getData(parsm.sData.address,parsm.sData.value, {
+    //   from: Parames_address.fromAddress
+    //     })
+    // }
+    //
+    //     //  05. 对接数据
+    //     let rawTx = {
+    //       nonce: Parames_row.Tx_nonce,
+    //       gasPrice: Parames_row.Tx_gasPrice, // TODO:
+    //       gasLimit: Parames_row.Tx_gasLimit,
+    //       from: Parames_row.Tx_from,
+    //       to: Parames_row.Tx_to,
+    //       value: Parames_row.Tx_value, // TODO:
+    //       data: Parames_row.Tx_data
+    //     }
+    //         // 06.签名编译
+    //         let SignData = Actions_CommonTool.Tool_SignData({//3483
+    //           rawTx: rawTx,
+    //           key: Json_list.PRIVATEKEY.Drop_privateKey
+    //         });
+    //         // result = await web3.eth.sendRawTransaction(SignData);
+    //          web3.eth.sendRawTransaction(SignData,(err,hash)=>{
+    //              if (!err){
+    //                console.log("hash-----------",hash);
+    //              }else{
+    //                console.log("err",err);
+    //              }
+    //          })
+    //
+    //         console.log("----发送交易返回数据是：",result);
+    //         return result;
+  },
+
   /*方法说明
    *@method D_multiSend
    *@for Actions_Contrant_Drop 所属
@@ -2690,8 +3046,8 @@ var Actions_Contrant_Drop = {
 
     let Parames_row = {
       Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
-      Tx_gasPrice: web3.toHex(web3.eth.gasPrice),
-      Tx_gasLimit: web3.toHex(5000000),
+      Tx_gasPrice: web3.toHex((web3.eth.gasPrice)*1.2),
+      Tx_gasLimit: web3.toHex(8000000),
       Tx_from: Parames_address.fromAddress,
       Tx_to: Parames_address.contractAddress,
       Tx_value: "0x0",
