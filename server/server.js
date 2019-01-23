@@ -2695,7 +2695,7 @@ var Actions_Contrant_Drop = {
       console.log("发送块:",i);
       //序列化数据
       let Parames_row = {
-        Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
+        Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)+1),
         Tx_gasPrice: web3.toHex((web3.eth.gasPrice)*10),
         Tx_gasLimit: web3.toHex(8000000),
         Tx_from: Parames_address.fromAddress,
@@ -2734,7 +2734,7 @@ var Actions_Contrant_Drop = {
       //sleep
       console.log('暂停中........60秒',i);
       await sleep(1000*60);
-      console.log("开始...",i);
+      console.log("继续开始...",i);
     }
       return result;
   },
