@@ -8,17 +8,28 @@ truffle 部分
 
 
 
-
-
 node 部分
+
+      web3js 部分
+
+      安装    npm install --save web3
+
+      koa2部分
+
       安装    npm i koa
       安装    npm install --save koa-router
-      安装    koa-views npm install --save koa-views / cnpm install --save koa-views
-      安装    ejs npm install ejs --save / cnpm install ejs --save
+      安装    npm install --save koa-views / cnpm install --save koa-views
+      安装    npm install ejs --save / cnpm install ejs --save
       安装    npm install --save koa-bodyparser
       安装    npm install --save art-template
       安装    npm install --save koa-art-template
-      安装        cors
+      安装    npm install   cors
       安装    npm install koa-convert
-      安装    npm i sleep
       安装    npm  install  log4js
+      安装    npm i ethereumjs-tx
+      安装    npm i sleep-promise
+
+演示方法 部分
+
+      **闪电空投     D_boltDrop
+      **大文件空投   D_multiSend_Test

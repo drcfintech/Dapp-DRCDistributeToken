@@ -57,6 +57,7 @@ var Actions_data = {
 
   }
 }
+
 //3.Actions_Koa=>Koa框架以及Koa插件初始化和启动配置(Koa相关)
 var Actions_Koa = {
 
@@ -81,18 +82,26 @@ var Actions_Koa = {
     logger.level = 'info';
     log4js.configure({
       appenders: {
-        out: { type: 'stdout' },//设置是否在控制台打印日志
-        info: { type: 'file', filename: '../logs/info.log' }
+        out: {
+          type: 'stdout'
+        }, //设置是否在控制台打印日志
+        info: {
+          type: 'file',
+          filename: '../logs/info.log'
+        }
       },
       categories: {
-        default: { appenders: [ 'out', 'info' ], level: 'info' }//去掉'out'。控制台不打印日志
+        default: {
+          appenders: ['out', 'info'],
+          level: 'info'
+        } //去掉'out'。控制台不打印日志
       }
     });
     app.use(convert(bodyParser({
-        enableTypes:['json', 'form', 'text'],
-        formLimit:"10mb",
-        queryString:{
-        parameterLimit:100000000000000
+      enableTypes: ['json', 'form', 'text'],
+      formLimit: "10mb",
+      queryString: {
+        parameterLimit: 100000000000000
       }
     })));
     app.use(cors());
@@ -104,6 +113,7 @@ var Actions_Koa = {
     });
   }
 }
+
 //4.Actions_Router=>router路由的get方法，post方法配置
 var Actions_Router = {
   //get 路由
@@ -131,12 +141,12 @@ var Actions_Router = {
     */
 
     /**
-   * @get{方式发起 代币合约的transferFrom交易}
-   * @method {transferFrom}
-   * @for {NodeList}
-   * @param {address from,address to, uint256 value}
-   * @return {hash}
-   */
+     * @get{方式发起 代币合约的transferFrom交易}
+     * @method {transferFrom}
+     * @for {NodeList}
+     * @param {address from,address to, uint256 value}
+     * @return {hash}
+     */
     router.get('/Token/T_transferFrom', (ctx, next) => {
       // TODO:校验数据
       let sFrom = Json_list.ADDRESS_TOKEN;
@@ -156,12 +166,12 @@ var Actions_Router = {
     });
 
     /**
-   * @get{方式发起 代币合约的transfer交易}
-   * @method {transfer}
-   * @for {routerList}
-   * @param {address to,uint256 value}
-   * @return {hash}
-   */
+     * @get{方式发起 代币合约的transfer交易}
+     * @method {transfer}
+     * @for {routerList}
+     * @param {address to,uint256 value}
+     * @return {hash}
+     */
     router.get('/Token/T_transfer', (ctx, next) => {
       // TODO:
       //  01. TODO:校验数据
@@ -201,12 +211,12 @@ var Actions_Router = {
     });
 
     /**
-   * @get{方式发起 代币合约的balanceOf交易}
-   * @method {balanceOf}
-   * @for {routerList}
-   * @param {address owner}
-   * @return {hash}
-   */
+     * @get{方式发起 代币合约的balanceOf交易}
+     * @method {balanceOf}
+     * @for {routerList}
+     * @param {address owner}
+     * @return {hash}
+     */
     router.get('/Token/T_balanceOf', (ctx, next) => {
       // TODO:
       //  01. TODO:校验数据
@@ -245,12 +255,12 @@ var Actions_Router = {
     });
 
     /**
-   * @get{方式发起 代币合约的approv交易}
-   * @method {approve}
-   * @for {routerList}
-   * @param {address spender,uint256 value}
-   * @return {hash}
-   */
+     * @get{方式发起 代币合约的approv交易}
+     * @method {approve}
+     * @for {routerList}
+     * @param {address spender,uint256 value}
+     * @return {hash}
+     */
     router.get('/Token/T_approve', (ctx, next) => {
       // TODO:
       ctx.body = "T_approve"; //  01. TODO:校验数据
@@ -290,12 +300,12 @@ var Actions_Router = {
     });
 
     /**
-   * @get{方式发起 代币合约的allowanc交易}
-   * @method {allowanc}
-   * @for {routerList}
-   * @param {address owner,uint256 value}
-   * @return {hash}
-   */
+     * @get{方式发起 代币合约的allowanc交易}
+     * @method {allowanc}
+     * @for {routerList}
+     * @param {address owner,uint256 value}
+     * @return {hash}
+     */
     router.get('/Token/T_allowance', (ctx, next) => {
       // TODO:
       ctx.body = "T_allowance";
@@ -339,12 +349,12 @@ var Actions_Router = {
     //空投合约路由
 
     /**
-   * @get{方式发起 空投合约的setToken交易}
-   * @method {setToken}
-   * @for {routerList}
-   * @param {address _token}
-   * @return {hash}
-   */
+     * @get{方式发起 空投合约的setToken,设置代币种类}
+     * @method {setToken}
+     * @for {routerList}
+     * @param {address _token}
+     * @return {hash}
+     */
     router.get('/Drop/D_setToken', (ctx, next) => {
       // TODO:
       ctx.body = "D_setToken";
@@ -385,12 +395,12 @@ var Actions_Router = {
     });
 
     /**
-   * @get{方式发起 空投合约的multiSendandself交易}
-   * @method {multiSendandself}
-   * @for {routerList}
-   * @param {address[] memory  _destAddrs,uint256[]  memory _values,uint256  _valuesmyself}
-   * @return {hash}
-   */
+     * @get{方式发起 空投合约的multiSendandself交易}
+     * @method {multiSendandself}
+     * @for {routerList}
+     * @param {address[] memory  _destAddrs,uint256[]  memory _values,uint256  _valuesmyself}
+     * @return {hash}
+     */
     router.get('/Drop/D_multiSendandself', (ctx, next) => {
       // TODO:
       ctx.body = "D_multiSendandself";
@@ -439,12 +449,12 @@ var Actions_Router = {
     });
 
     /**
-   * @get{方式发起 空投合约的multiSend交易}
-   * @method {multiSend}
-   * @for {routerList}
-   * @param {address[]  memory _destAddrs, uint256[] memory _values}
-   * @return {hash}
-   */
+     * @get{方式发起 空投合约的multiSend交易}
+     * @method {multiSend}
+     * @for {routerList}
+     * @param {address[]  memory _destAddrs, uint256[] memory _values}
+     * @return {hash}
+     */
     router.get('/Drop/D_multiSend', (ctx, next) => {
       // TODO:
       ctx.body = "D_multiSend";
@@ -484,12 +494,12 @@ var Actions_Router = {
     });
 
     /**
-   * @get{方式发起 空投合约的multiself交易}
-   * @method {multiSend}
-   * @for {routerList}
-   * @param {uint256  _values,address  addres_owner}
-   * @return {hash}
-   */
+     * @get{方式发起 空投合约的multiself交易}
+     * @method {multiSend}
+     * @for {routerList}
+     * @param {uint256  _values,address  addres_owner}
+     * @return {hash}
+     */
     router.get('/Drop/D_multiself', (ctx, next) => {
       // TODO:
       ctx.body = "D_multiself";
@@ -529,12 +539,12 @@ var Actions_Router = {
     });
 
     /**
-   * @get{方式发起 空投合约的settrustOwner-存入白名单}
-   * @method {settrustOwner}
-   * @for {routerList}
-   * @param {address  _ownaddress,string memory _owntext}
-   * @return {hash}
-   */
+     * @get{方式发起 空投合约的settrustOwner-存入白名单}
+     * @method {settrustOwner}
+     * @for {routerList}
+     * @param {address  _ownaddress,string memory _owntext}
+     * @return {hash}
+     */
     router.get('/Drop/D_settrustOwner', (ctx, next) => {
       // TODO:
       ctx.body = "D_settrustOwner";
@@ -574,12 +584,12 @@ var Actions_Router = {
     });
 
     /**
-   * @get{方式发起 空投合约的seterctypeName-存入合约记录}
-   * @method {settrustOwner}
-   * @for {routerList}
-   * @param {address  _ownaddress,string memory _owntext}
-   * @return {hash}
-   */
+     * @get{方式发起 空投合约的seterctypeName-存入合约记录}
+     * @method {settrustOwner}
+     * @for {routerList}
+     * @param {address  _ownaddress,string memory _owntext}
+     * @return {hash}
+     */
     router.get('/Drop/D_seterctypeName', (ctx, next) => {
       // TODO:
       ctx.body = "D_seterctypeName";
@@ -619,12 +629,12 @@ var Actions_Router = {
     });
 
     /**
-   * @get{方式发起 空投合约的sethistoricalOwner-存入历史纪录}
-   * @method {sethistoricalOwner}
-   * @for {routerList}
-   * @param {address  _hisaddress,string memory _histext}
-   * @return {hash}
-   */
+     * @get{方式发起 空投合约的sethistoricalOwner-存入历史纪录}
+     * @method {sethistoricalOwner}
+     * @for {routerList}
+     * @param {address  _hisaddress,string memory _histext}
+     * @return {hash}
+     */
     router.get('/Drop/D_sethistoricalOwner', (ctx, next) => {
       // TODO:
       ctx.body = "D_sethistoricalOwner";
@@ -664,12 +674,12 @@ var Actions_Router = {
     });
 
     /**
-   * @get{方式发起 空投合约的transfer-存入历史纪录}
-   * @method {transfer}
-   * @for {routerList}
-   * @param {address to, uint256 value}
-   * @return {hash}
-   */
+     * @get{方式发起 空投合约的transfer-存入历史纪录}
+     * @method {transfer}
+     * @for {routerList}
+     * @param {address to, uint256 value}
+     * @return {hash}
+     */
     router.get('/Drop/D_transfer', (ctx, next) => {
       // TODO:
       ctx.body = "D_transfer";
@@ -709,12 +719,12 @@ var Actions_Router = {
     });
 
     /**
-   * @get{方式发起 空投合约的approve }
-   * @method {approve}
-   * @for {routerList}
-   * @param {address spender, uint256 value}
-   * @return {hash}
-   */
+     * @get{方式发起 空投合约的approve }
+     * @method {approve}
+     * @for {routerList}
+     * @param {address spender, uint256 value}
+     * @return {hash}
+     */
     router.get('/Drop/D_approve', (ctx, next) => {
       // TODO:
       ctx.body = "D_approve";
@@ -754,12 +764,12 @@ var Actions_Router = {
     });
 
     /**
-   * @get{方式发起 空投合约的transferFrom}
-   * @method {transferFrom}
-   * @for {routerList}
-   * @param {address from, address to, uint256 value}
-   * @return {hash}
-   */
+     * @get{方式发起 空投合约的transferFrom}
+     * @method {transferFrom}
+     * @for {routerList}
+     * @param {address from, address to, uint256 value}
+     * @return {hash}
+     */
     router.get('/Drop/D_transferFrom', (ctx, next) => {
       // TODO:
       ctx.body = "D_transferFrom";
@@ -799,12 +809,12 @@ var Actions_Router = {
     });
 
     /**
-   * @get{方式发起 空投合约的balanceOf}
-   * @method {balanceOf}
-   * @for {routerList}
-   * @param {address owner}
-   * @return {hash}
-   */
+     * @get{方式发起 空投合约的balanceOf}
+     * @method {balanceOf}
+     * @for {routerList}
+     * @param {address owner}
+     * @return {hash}
+     */
     router.get('/Drop/D_balanceOf', (ctx, next) => {
       // TODO:
       ctx.body = "D_balanceOf";
@@ -845,12 +855,12 @@ var Actions_Router = {
 
     //  M_prepare 路由
     /**
-   * @get{方式发起 空投合约的prepare}
-   * @method {prepare}
-   * @for {routerList}
-   * @param {}
-   * @return {hash}
-   */
+     * @get{方式发起 空投合约的prepare}
+     * @method {prepare}
+     * @for {routerList}
+     * @param {}
+     * @return {hash}
+     */
     router.get('/Drop/M_prepare', (ctx, next) => {
       //  01. TODO:校验数据
       //  02. 解析数据打包
@@ -901,12 +911,12 @@ var Actions_Router = {
     });
 
     /**
-   * @get{方式发起 空投合约的flyDrop}
-   * @method {flyDrop}
-   * @for {routerList}
-   * @param {}
-   * @return {hash}
-   */
+     * @get{方式发起 空投合约的flyDrop}
+     * @method {flyDrop}
+     * @for {routerList}
+     * @param {}
+     * @return {hash}
+     */
     router.get('/Drop/M_flyDrop', (ctx, next) => {
       //  01. TODO:校验数据
       console.log("url：http://127.0.0.1:3003/Drop/M_flyDrop");
@@ -1022,12 +1032,12 @@ var Actions_Router = {
     });
 
     /**
-   * @post{方式发起 代币合约的transferFrom交易}
-   * @method {transferFrom}
-   * @for {NodeList}
-   * @param {address from,address to, uint256 value}
-   * @return {hash}
-   */
+     * @post{方式发起 代币合约的transferFrom交易}
+     * @method {transferFrom}
+     * @for {NodeList}
+     * @param {address from,address to, uint256 value}
+     * @return {hash}
+     */
     router.post('/Token/T_transferFrom', (ctx, next) => {
       // TODO:
       ctx.body = "T_transferFrom";
@@ -1038,55 +1048,57 @@ var Actions_Router = {
     });
 
     /**
-   * @post{方式发起 代币合约的transfer交易}
-   * @method {transfer}
-   * @for {routerList}
-   * @param {address to,uint256 value}
-   * @return {hash}
-   */
+     * @post{方式发起 代币合约的transfer交易}
+     * @method {transfer}
+     * @for {routerList}
+     * @param {address to,uint256 value}
+     * @return {hash}
+     */
     router.post('/Token/T_transfer', (ctx, next) => {
       // TODO:
       ctx.body = "T_transfer";
     });
 
     /**
-    * @post{方式发起 代币合约的approv交易}
-    * @method {approve}
-    * @for {routerList}
-    * @param {address spender,uint256 value}
-    * @return {hash}
-    */
+     * @post{方式发起 代币合约的approv交易}
+     * @method {approve}
+     * @for {routerList}
+     * @param {address spender,uint256 value}
+     * @return {hash}
+     */
     router.post('/Token/T_approve', (ctx, next) => {
       // TODO:
       ctx.body = "T_approve";
     });
 
     /**
-   * @post{方式发起 代币合约的allowanc交易}
-   * @method {allowanc}
-   * @for {routerList}
-   * @param {address owner,uint256 value}
-   * @return {hash}
-   */
+     * @post{方式发起 代币合约的allowanc交易}
+     * @method {allowanc}
+     * @for {routerList}
+     * @param {address owner,uint256 value}
+     * @return {hash}
+     */
     router.post('/Token/T_allowance', (ctx, next) => {
       // TODO:
       ctx.body = "T_allowance";
     });
 
     /**
-   * @post{方式发起 空投合约的setToken交易}
-   * @method {setToken}
-   * @for {routerList}
-   * @param {address _token}
-   * @return {hash}
-   */
+     * @post{方式发起 空投合约的setToken交易，设置代币种类}
+     * @method {setToken}
+     * @for {routerList}
+     * @param {address _token}
+     * @return {hash}
+     */
     router.post('/Drop/D_setToken', (ctx, next) => {
       // TODO:
-      ctx.body = "D_setToken";
+      // ctx.body = "D_setToken";
+      //结果集
+      let result;
       let Pms_package = {
         data: {
           // address: ctx.request.query.address,
-           address: '0x32cDA8ca0A0fFA4cb7F40ccc33e007950d96A34F',
+          address: '0x32cDA8ca0A0fFA4cb7F40ccc33e007950d96A34F',
         },
         ctx: {
           url: ctx.url,
@@ -1100,247 +1112,582 @@ var Actions_Router = {
           value: ''
         },
         bz: {}
-      }
-      console.log("初始化代币");
+      };
+      console.log("/Drop/D_setToken初始化代币......");
       //要初始化的合约的地址, 调用地址验证方法,
+      let cData = ctx.request.body; //接收参数
+      //解析：参数
+      // TODO:
       let Token_address = '0x32cDA8ca0A0fFA4cb7F40ccc33e007950d96A34F';
-      //调用web3校验函数判断当前函数是否是有效地址 3021
-      let cData =  {address:Token_address};
-      console.log("对象化的地址是：",cData);
-      let result =   Actions_Web3jsUtils.web_postisAddress(cData);
-      console.log("地址校验的结果是：",result.sState);
-      //如果地址校验通过,调用智能合约
-
-      deploy = async (data, next) => {
-        let result = await Actions_Contrant_Drop.D_setToken({
-          state: data,
-          data: data,
-          system: data
+      //调用web3校验函数判断当前函数是否是有效地址
+       cData = {
+        address: Token_address
+      };
+      console.log("代币实例化的地址是=>", cData);
+      //验证地址是否是合法地址
+     result = Actions_Web3jsUtils.web_postisAddress(cData);
+      console.log("地址校验的结果是：", result.sState);
+      if (result.sState == 3) {
+        //通过 校验
+        deploy = async (data, next) => {
+          let result = await Actions_Contrant_Drop.D_setToken({
+            state: data,
+            data: data,
+            system: data
+          });
+          console.log("=>", result);
+          return result;
+        }
+        //  04. 结果返回
+        deploy(Pms_package.data).then(res => {
+          ctx.body = "调用D_setToken结果是=>" + res;
         });
-        console.log("=>", result);
-        return result;
+      } else if (result.sState == 2) {
+        //未用过校验
+        let text = "地址不是一个有效合法的地址";
+        return text;
       }
-      //  04. 结果返回
-      deploy(Pms_package.data).then(res => {
-        ctx.body = "调用D_setToken结果是=>" + res;
-      });
-
     });
 
     /**
-   * @post{方式发起 空投合约的multiSendandself交易}
-   * @method {multiSendandself}
-   * @for {routerList}
-   * @param {address[] memory  _destAddrs,uint256[]  memory _values,uint256  _valuesmyself}
-   * @return {hash}
-   */
+     * @post{方式发起 空投合约的multiSendandself交易}
+     * @method {multiSendandself}
+     * @for {routerList}
+     * @param {address[] memory  _destAddrs,uint256[]  memory _values,uint256  _valuesmyself}
+     * @return {hash}
+     */
     router.post('/Drop/D_multiSendandself', (ctx, next) => {
       // TODO:
       ctx.body = "D_multiSendandself";
+      // TODO:
+      let data = ctx.request.body;
+      //  01. TODO:校验数据
+      let cData = data.data;
+      let resultData = Actions_Web3jsUtils.web3_postVerifiCation_big(cData);
+      //调用 合约方法 multiSendandself
+      deploy = async (data, next) => {
+        let result = await Actions_Contrant_Drop.D_multiSendandself({
+          data: data
+        });
+        console.log("返回的结果是=>", result);
+        return result;
+      }
+      //结果返回
+      deploy(resultData).then(res => {
+        ctx.body = "调用D_multiSendandself结果是=>" + res;
+        cData = res;
+      });
+      return cData;
     });
-    /**  @ 空投合约 -批量投放代币*/
 
+    /**  @ 空投合约 -批量投放代币*/
     /**
-   * @post{方式发起 test}
-   * @method {D_multiSend_te}
-   * @for {routerList}
-   * @param {address[] memory  _destAddrs,uint256[]  memory _values,uint256  _valuesmyself}
-   * @return {hash}
-   */
-    router.post('/Drop/D_multiSend_te',(ctx, next) => {
+     * @post{方式发起 D_multiSend_te}
+     * @method {D_multiSend_te}
+     * @for {routerList}
+     * @param {address[] memory  _destAddrs,uint256[]  memory _values,uint256  _valuesmyself}
+     * @return {hash}
+     */
+    router.post('/Drop/D_multiSend_te', (ctx, next) => {
       // TODO:
       ctx.body = "D_multiSend_te";
       // TODO:
       let data = ctx.request.body;
-      // console.log("post请求-----D_multiSend_te", data.data);
-      // console.log("post请求-----D_multiSend_te", data);
       //  01. TODO:校验数据
-        let cData = data.data;
-      // console.log("----------------",cData,cData.length,typeof (cData));
-
-       // for(var i in cData){
-       //   console.log("00",i,cData[i].A,"B=",cData[i].B);
-       // }
+      let cData = data.data;
+      //校验
       let resultData = Actions_Web3jsUtils.web3_postVerifiCation_big(cData);
-      // console.log("web3_postVerifiCation返回数据是：", resultData);
       //调用 合约方法
       // TODO:校验数据
-      // let sFrom = Json_list. ;
       deploy = async (data, next) => {
         let result = await Actions_Contrant_Drop.D_multiSend_Test({
-          data:data
+          data: data
         });
         console.log("1111=>", result);
         return result;
       }
       //结果返回
       deploy(resultData).then(res => {
-        ctx.body = "调用tranfer结果是=>" + res;
+        ctx.body = "调用结果是=>" + res;
       });
       return cData;
     });
     //
     /**
-   * @post{方式发起 空投合约的multiSend交易}
-   * @method {multiSend}
-   * @for {routerList}
-   * @param {address[]  memory _destAddrs, uint256[] memory _values}
-   * @return {hash}
-   */
+     * @post{方式发起 空投合约的multiSend交易}
+     * @method {multiSend}
+     * @for {routerList}
+     * @param {address[]  memory _destAddrs, uint256[] memory _values}
+     * @return {hash}
+     */
     router.post('/Drop/D_multiSend', (ctx, next) => {
       // TODO:
       ctx.body = "D_multiSend";
-
       // TODO:
       let data = ctx.request.body;
-      console.log("post请求-----D_multiSend", data);
       //  01. TODO:校验数据
-      let cData = Actions_Web3jsUtils.web3_postVerifiCation(data);
-      console.log("web3_postVerifiCation返回数据是：", cData);
+      let cData = data.data;
+      //校验
+      let resultData = Actions_Web3jsUtils.web3_postVerifiCation_big(cData);
       //调用 合约方法
       // TODO:校验数据
-      // let sFrom = Json_list. ;
       deploy = async (data, next) => {
         let result = await Actions_Contrant_Drop.D_multiSend({
-          data
+          data: data
         });
-        console.log("1111=>", result);
+        console.log("结果是=>", result);
         return result;
       }
       //结果返回
-      deploy(cData).then(res => {
-        ctx.body = "调用tranfer结果是=>" + res;
+      deploy(resultData).then(res => {
+        ctx.body = "调用结果是=>" + res;
+        cData = res;
       });
       return cData;
     });
     /**
-   * @post{方式发起 空投合约的multiself交易}
-   * @method {multiSend}
-   * @for {routerList}
-   * @param {uint256  _values,address  addres_owner}
-   * @return {hash}
-   */
+     * @post{方式发起 空投合约的multiself交易}
+     * @method {multiSend}
+     * @for {routerList}
+     * @param {uint256  _values,address  addres_owner}
+     * @return {hash}
+     */
     router.post('/Drop/D_multiself', (ctx, next) => {
       // TODO:
       ctx.body = "D_multiself";
+      // TODO:
+      let data = ctx.request.body;
+      //  01. TODO:校验数据
+      let cData = data.data;
+      //校验
+      let resultData = Actions_Web3jsUtils.web_postisAddress(cData);
+      let text = "value不能小于0！";
+      //调用 合约方法
+      if (cData.value <= 0) {
+
+        return text;
+      } else if (resultData.sState == 3) {
+        return text;
+      } else if (resultData.sState == 2) {
+        //到这，数据校验成功,调用合约
+        deploy = async (data, next) => {
+          let result = await Actions_Contrant_Drop.D_multiself({
+            data: data
+          });
+          console.log("结果是=>", result);
+          return result;
+        }
+        //结果返回
+        deploy(resultData).then(res => {
+          ctx.body = "调用结果是=>" + res;
+          cData = res;
+        });
+
+        return cData;
+      }
+
     });
 
     /**
-   * @post{方式发起 空投合约的settrustOwner-存入白名单}
-   * @method {settrustOwner}
-   * @for {routerList}
-   * @param {address  _ownaddress,string memory _owntext}
-   * @return {hash}
-   */
+     * @post{方式发起 空投合约的settrustOwner-存入白名单}
+     * @method {settrustOwner}
+     * @for {routerList}
+     * @param {address  _ownaddress,string memory _owntext}
+     * @return {hash}
+     */
     router.post('/Drop/D_settrustOwner', (ctx, next) => {
       // TODO:
       ctx.body = "D_settrustOwner";
+      // TODO:
+      let data = ctx.request.body;
+      //  01. TODO:校验数据
+      let cData = data.data;
+      //校验
+      let resultData = Actions_Web3jsUtils.web_postisAddress(cData);
+      let text = "value不能小于0！";
+      //调用 合约方法
+      if (cData.text == null || cData.text == undefined || cData.text == '') {
+        return text;
+      } else if (resultData.sState == 3) {
+        return text;
+      } else if (resultData.sState == 2) {
+        //到这，数据校验成功,调用合约
+        deploy = async (data, next) => {
+          let result = await Actions_Contrant_Drop.D_settrustOwner({
+            data: data
+          });
+          console.log("结果是=>", result);
+          return result;
+        }
+        //结果返回
+        deploy(resultData).then(res => {
+          ctx.body = "调用结果是=>" + res;
+          cData = res;
+        });
+
+        return cData;
+      }
     });
 
     /**
-   * @post{方式发起 空投合约的seterctypeName-存入合约记录}
-   * @method {settrustOwner}
-   * @for {routerList}
-   * @param {address  _ownaddress,string memory _owntext}
-   * @return {hash}
-   */
+     * @post{方式发起 空投合约的seterctypeName-存入合约记录}
+     * @method {settrustOwner}
+     * @for {routerList}
+     * @param {address  _ownaddress,string memory _owntext}
+     * @return {hash}
+     */
     router.post('/Drop/D_seterctypeName', (ctx, next) => {
       // TODO:
       ctx.body = "D_seterctypeName";
+      // TODO:
+      console.log("调用post-D_seterctypeName 请求");
+      let data = ctx.request.body;
+      //  01. TODO:校验数据
+      let cData = data.data;
+      //校验
+      let resultData = Actions_Web3jsUtils.web_postisAddress(cData);
+      let text = "value不能小于0!";
+      let address = '地址不合法';
+      //调用 合约方法
+      if (cData.text == null || cData.text == undefined || cData.text == '') {
+        return text;
+      } else if (resultData.sState == 3) {
+        return address;
+      } else if (resultData.sState == 2) {
+        //到这，数据校验成功,调用合约
+        deploy = async (data, next) => {
+          let result = await Actions_Contrant_Drop.D_seterctypeName({
+            data: data
+          });
+          console.log("结果是=>", result);
+          return result;
+        }
+        //结果返回
+        deploy(resultData).then(res => {
+          ctx.body = "调用结果是=>" + res;
+          cData = res;
+        });
+
+        return cData;
+      }
     });
 
     /**
-   * @post{方式发起 空投合约的sethistoricalOwner-存入历史纪录}
-   * @method {sethistoricalOwner}
-   * @for {routerList}
-   * @param {address  _hisaddress,string memory _histext}
-   * @return {hash}
-   */
+     * @post{方式发起 空投合约的sethistoricalOwner-存入历史纪录}
+     * @method {sethistoricalOwner}
+     * @for {routerList}
+     * @param {address  _hisaddress,string memory _histext}
+     * @return {hash}
+     */
     router.post('/Drop/D_sethistoricalOwner', (ctx, next) => {
       // TODO:
       ctx.body = "D_sethistoricalOwner";
+      // TODO:
+      console.log("调用post-sethistoricalOwner 请求");
+      let data = ctx.request.body;
+      //  01. TODO:校验数据
+      let cData = data.data;
+      //校验
+      let resultData = Actions_Web3jsUtils.web_postisAddress(cData);
+      let text = "value不能小于0!";
+      let address = '地址不合法';
+      //调用 合约方法
+      if (cData.text == null || cData.text == undefined || cData.text == '') {
+        return text;
+      } else if (resultData.sState == 3) {
+        return address;
+      } else if (resultData.sState == 2) {
+        //到这，数据校验成功,调用合约
+        deploy = async (data, next) => {
+          let result = await Actions_Contrant_Drop.D_sethistoricalOwner({
+            data: data
+          });
+          console.log("结果是=>", result);
+          return result;
+        }
+        //结果返回
+        deploy(resultData).then(res => {
+          ctx.body = "调用结果是=>" + res;
+          cData = res;
+        });
+
+        return cData;
+      }
     });
 
     /**
-   * @post{方式发起 空投合约的transfer-存入历史纪录}
-   * @method {transfer}
-   * @for {routerList}
-   * @param {address to, uint256 value}
-   * @return {hash}
-   */
+     * @post{方式发起 空投合约的transfer-存入历史纪录}
+     * @method {transfer}
+     * @for {routerList}
+     * @param {address to, uint256 value}
+     * @return {hash}
+     */
     router.post('/Drop/D_transfer', (ctx, next) => {
       // TODO:
       ctx.body = "D_transfer";
+      // TODO:
+      console.log("调用post-D_transfer请求");
+      let data = ctx.request.body;
+      //  01. TODO:校验数据
+      let cData = data.data;
+      //校验
+      let resultData = Actions_Web3jsUtils.web_postisAddress(cData);
+      let text = "value不能小于0!";
+      let address = '地址不合法';
+      //调用 合约方法
+      if (cData.text == null || cData.text == undefined || cData.text == '') {
+        return text;
+      } else if (resultData.sState == 3) {
+        return address;
+      } else if (resultData.sState == 2) {
+        //到这，数据校验成功,调用合约
+        deploy = async (data, next) => {
+          let result = await Actions_Contrant_Drop.D_transfer({
+            data: data
+          });
+          console.log("结果是=>", result);
+          return result;
+        }
+        //结果返回
+        deploy(resultData).then(res => {
+          ctx.body = "调用结果是=>" + res;
+          cData = res;
+        });
+
+        return cData;
+      }
     });
 
     /**
-   * @post{方式发起 空投合约的approve }
-   * @method {approve}
-   * @for {routerList}
-   * @param {address spender, uint256 value}
-   * @return {hash}
-   */
+     * @post{方式发起 空投合约的approve }
+     * @method {approve}
+     * @for {routerList}
+     * @param {address spender, uint256 value}
+     * @return {hash}
+     */
     router.post('/Drop/D_approve', (ctx, next) => {
       // TODO:
       ctx.body = "D_approve";
+      // TODO:
+      console.log("调用post-D_approve请求");
+      let data = ctx.request.body;
+      //  01. TODO:校验数据
+      let cData = data.data;
+      //校验
+      // TODO:
+      let resultData = Actions_Web3jsUtils.web_postisAddress(cData);
+      let text = "value不能小于0!";
+      let address = '地址不合法';
+      //调用 合约方法
+      if (cData.text == null || cData.text == undefined || cData.text == '') {
+        return text;
+      } else if (resultData.sState == 3) {
+        return address;
+      } else if (resultData.sState == 2) {
+        //到这，数据校验成功,调用合约
+        deploy = async (data, next) => {
+          let result = await Actions_Contrant_Drop.D_approve({
+            data: data
+          });
+          console.log("结果是=>", result);
+          return result;
+        }
+        //结果返回
+        deploy(resultData).then(res => {
+          ctx.body = "调用结果是=>" + res;
+          cData = res;
+        });
+
+        return cData;
+      }
     });
 
     /**
-   * @post{方式发起 空投合约的transferFrom}
-   * @method {transferFrom}
-   * @for {routerList}
-   * @param {address from, address to, uint256 value}
-   * @return {hash}
-   */
+     * @post{方式发起 空投合约的transferFrom}
+     * @method {transferFrom}
+     * @for {routerList}
+     * @param {address from, address to, uint256 value}
+     * @return {hash}
+     */
     router.post('/Drop/D_transferFrom', (ctx, next) => {
       // TODO:
       ctx.body = "D_transferFrom";
+
+      // TODO:
+      console.log("调用post-D_transferFrom请求");
+      let data = ctx.request.body;
+      //  01. TODO:校验数据
+      let cData = data.data;
+      //校验
+      // TODO:
+      let resultData = Actions_Web3jsUtils.web_postisAddress(cData);
+      let text = "value不能小于0!";
+      let address = '地址不合法';
+      //调用 合约方法
+      if (cData.text == null || cData.text == undefined || cData.text == '') {
+        return text;
+      } else if (resultData.sState == 3) {
+        return address;
+      } else if (resultData.sState == 2) {
+        //到这，数据校验成功,调用合约
+        deploy = async (data, next) => {
+          let result = await Actions_Contrant_Drop.D_transferFrom({
+            data: data
+          });
+          console.log("结果是=>", result);
+          return result;
+        }
+        //结果返回
+        deploy(resultData).then(res => {
+          ctx.body = "调用结果是=>" + res;
+          cData = res;
+        });
+
+        return cData;
+      }
     });
 
     /**
-   * @post{方式发起 空投合约的balanceOf}
-   * @method {balanceOf}
-   * @for {routerList}
-   * @param {address owner}
-   * @return {hash}
-   */
+     * @post{方式发起 空投合约的balanceOf}
+     * @method {balanceOf}
+     * @for {routerList}
+     * @param {address owner}
+     * @return {hash}
+     */
     router.post('/Drop/D_balanceOf', (ctx, next) => {
       // TODO:
       ctx.body = "D_balanceOf";
+      // TODO:
+      console.log("调用post-D_balanceOf请求");
+      let data = ctx.request.body;
+      //  01. TODO:校验数据
+      let cData = data.data;
+      //校验
+      // TODO:
+      let resultData = Actions_Web3jsUtils.web_postisAddress(cData);
+      let address = '地址不合法';
+      //调用 合约方法
+      if (cData.address == null || cData.address == undefined || cData.address == '') {
+        return text;
+      } else if (resultData.sState == 3) {
+        return address;
+      } else if (resultData.sState == 2) {
+        //到这，数据校验成功,调用合约
+        deploy = async (data, next) => {
+          let result = await Actions_Contrant_Drop.D_balanceOf({
+            data: data
+          });
+          console.log("结果是=>", result);
+          return result;
+        }
+        //结果返回
+        deploy(resultData).then(res => {
+          ctx.body = "调用结果是=>" + res;
+          cData = res;
+        });
+
+        return cData;
+      }
     });
 
     /**
-   * @post{方式发起 空投合约的prepare}
-   * @method {prepare}
-   * @for {routerList}
-   * @param {}
-   * @return {hash}
-   */
+     * @post{方式发起 空投合约的prepare}
+     * @method {prepare}
+     * @for {routerList}
+     * @param {}
+     * @return {hash}
+     */
     router.post('/Drop/M_prePare', (ctx, next) => {
-      // TODO:
-      ctx.body = "M_prepare";
+      // // TODO:
+      // ctx.body = "M_prepare";
+      // // TODO:
+      // ctx.body = "D_balanceOf";
+      // // TODO:
+      // console.log("调用post-M_prePare请求");
+      // let data = ctx.request.body;
+      // //  01. TODO:校验数据
+      // let cData = data.data;
+      // //校验
+      // // TODO:
+      // let resultData = Actions_Web3jsUtils.web_postisAddress(cData);
+      // let address = '地址不合法';
+      // //调用 合约方法
+      // if (cData.address == null || cData.address == undefined || cData.address == '') {
+      //   return text;
+      // } else if (resultData.sState == 3) {
+      //   return address;
+      // } else if (resultData.sState == 2) {
+      //   //到这，数据校验成功,调用合约
+      //   deploy = async (data, next) => {
+      //     let result = await Actions_Contrant_Drop.M_prePare({
+      //       data: data
+      //     });
+      //     console.log("结果是=>", result);
+      //     return result;
+      //   }
+      //   //结果返回
+      //   deploy(resultData).then(res => {
+      //     ctx.body = "调用结果是=>" + res;
+      //     cData = res;
+      //   });
+      //
+      //   return cData;
+      // }
     });
 
     /**
-   * @post{方式发起 空投合约的flyDrop}
-   * @method {flyDrop}
-   * @for {routerList}
-   * @param {}
-   * @return {hash}
-   */
+     * @post{方式发起 空投合约的flyDrop}
+     * @method {flyDrop}
+     * @for {routerList}
+     * @param {}
+     * @return {hash}
+     */
     router.post('/Drop/M_flyDrop', (ctx, next) => {
-      // TODO:
-      ctx.body = "M_flyDrop";
+      // // TODO:
+      // ctx.body = "M_flyDrop";
+      // // TODO:
+      // ctx.body = "M_flyDrop";
+      // // TODO:
+      // console.log("调用post-M_flyDrop请求");
+      // let data = ctx.request.body;
+      // //  01. TODO:校验数据
+      // let cData = data.data;
+      // //校验
+      // // TODO:
+      // let resultData = Actions_Web3jsUtils.web_postisAddress(cData);
+      // let address = '地址不合法';
+      // //调用 合约方法
+      // if (cData.address == null || cData.address == undefined || cData.address == '') {
+      //   return text;
+      // } else if (resultData.sState == 3) {
+      //   return address;
+      // } else if (resultData.sState == 2) {
+      //   //到这，数据校验成功,调用合约
+      //   deploy = async (data, next) => {
+      //     let result = await Actions_Contrant_Drop.M_flyDrop({
+      //       data: data
+      //     });
+      //     console.log("结果是=>", result);
+      //     return result;
+      //   }
+      //   //结果返回
+      //   deploy(resultData).then(res => {
+      //     ctx.body = "调用结果是=>" + res;
+      //     cData = res;
+      //   });
+      //
+      //   return cData;
+      // }
     });
 
 
     /**
-   * @post{方式发起 空投合约的flyDrop}//闪电空投
-   * @method {flyDrop}
-   * @for {routerList}
-   * @param {}
-   * @return {hash}
-   */
+     * @post{方式发起 空投合约的flyDrop}//闪电空投
+     * @method {flyDrop}
+     * @for {routerList}
+     * @param {}
+     * @return {hash}
+     */
     router.post('/Bolt/flyDrop', (ctx, next) => {
       // TODO:
       ctx.body = "M_flyDrop";
@@ -1350,14 +1697,13 @@ var Actions_Router = {
       console.log("接收到闪电空投的数据是：", ctx.request.body);
       //
       let cData = ctx.request.body;
-      //
       // TODO: 数据校验省略,
       // 发送请求
       deploy = async (data, next) => {
         let result = await Actions_Contrant_Drop.D_boltDrop({
-          data:data
+          data: data
         });
-        console.log("1111=>", result);
+        console.log("调用结果是=>", result);
         return result;
       }
 
@@ -1369,8 +1715,13 @@ var Actions_Router = {
   }
 
 }
+
 //5.Actions_initWeb3Provider=>web3js相关初始化参数(web3,合约实例等)
 var Actions_initWeb3Provider = {
+
+  /**
+   * @initWeb{初始化web对象}
+   */
   initWeb3: () => {
     //创建一个web3实例，设置一个provider,成功引入后，就可以用web3的api
     if (typeof web3 == 'undefined') {
@@ -1392,6 +1743,10 @@ var Actions_initWeb3Provider = {
     web3.eth.defaultAccount = '0x38a8DC14edE1DEf9C437bB3647445eEec06fF105';
     console.log("默认账户=>", web3.eth.defaultAccount);
   },
+
+  /**
+   * @initContract_Token{初始化Token代币合约实例}
+   */
   initContract_Token: () => {
     // TODO:
     let Abi_Token = UR_DrcToken;
@@ -1401,6 +1756,10 @@ var Actions_initWeb3Provider = {
     // TODO:
     console.log("Token合约实例完成=>");
   },
+
+  /**
+   * @initContract_Drop{初始化Drop空投合约初始化实例}
+   */
   initContract_Drop: () => {
     // TODO:
     let Abi_Drop = UR_DrcAirDrop;
@@ -1410,6 +1769,10 @@ var Actions_initWeb3Provider = {
     // TODO:
     console.log("Contract_Drop合约实例完成=>");
   },
+
+  /**
+   * @initContract_TokenMgr{初始化Drop空投合约初始化实例}
+   */
   initContract_TokenMgr: () => {
     // // TODO:
     // let Abi_TokenMgr = "";
@@ -1417,37 +1780,49 @@ var Actions_initWeb3Provider = {
     // //TokenMgr  实例化
     // var Contract_drop = web3.eth.constant(Abi_TokenMgr).at(Address_TokenMgr);
   }
+
 }
+
 //6.Actions_Web3jsCommonMethod=>webjs常用的方法(获取各种参数)
 var Actions_Web3jsCommonMethod = {
+  /**
+   * @  web_api{}
+   */
   web_api: () => {
     // TODO:
   },
+
+  /**
+   * @  web_node{}
+   */
   web_node: () => {
     // TODO:
 
   },
+
+  /**
+   * @ web3_isConnected{}
+   */
   web3_isConnected: () => {
     // TODO:
   },
+
+  /**
+   * @ web3_currentProvider{}
+   */
+
   web3_currentProvider: () => {
     // TODO:
   }
+
 }
+
 //7.Actions_Web3jsUtils=>web3js相关的工具方法(转换,校验等)
 var Actions_Web3jsUtils = {
-  web_api: () => {
-    // TODO:
-  },
-  web_node: () => {
-    // TODO:
 
-  },
-  web3_isConnected: () => {
-    // TODO:
-  },
-
-  //工具函数@预估gas
+  /**
+   * @  web3_estimateGas {具函数@预估gas数量}
+   */
   web3_estimateGas: (address, data) => {
     // TODO:
     let estimateGas = web3.eth.estimateGas({
@@ -1458,24 +1833,29 @@ var Actions_Web3jsUtils = {
     return estimateGas;
   },
 
-  // 工具函数@预估区块高度
+  /**
+   * @  web3_getNonce {工具函数@预估区块高度}
+   */
   web3_getNonce: (address) => {
     // TODO:
     let nonce = web3.eth.getTransactionCount(address);
     return nonce;
   },
 
-  //工具函数@序列化私钥
+  /**
+   * @  web3_bufferPrivateKey {工具函数@序列化私钥}
+   */
   web3_bufferPrivateKey: (value) => {
     // TODO:from
     const privateKey = new Buffer.from(value, 'hex');
     return privateKey;
   },
 
-  //工具函数@post data verification 3453
+  /**
+   * @  web3_postVerifiCation {工具函数@post请求数据集校验}
+   */
   web3_postVerifiCation: (data) => {
     // TODO:from
-    //data
     console.log("web3_postVerifiCation", data);
     // //正则表达式处理
     // let pattern1 = /[\u4e00-\u9fa5]+/g;
@@ -1499,10 +1879,10 @@ var Actions_Web3jsUtils = {
       ValidData: [],
       UnValidData: [],
       Bz: [],
-      sData:{
-        address:[],
-        value:[],
-        state:[]
+      sData: {
+        address: [],
+        value: [],
+        state: []
       }
     }
     // 01. 首先判断数据长度
@@ -1587,39 +1967,41 @@ var Actions_Web3jsUtils = {
         }
         result.ValidData.push(rows);
         //分开追加数据
-        result.sData.address.push( param[i].address);
-        result.sData.value.push(  parseInt(param[i].value+'00000000'));
+        result.sData.address.push(param[i].address);
+        result.sData.value.push(parseInt(param[i].value + '00000000'));
       }
       //数据处理完成后，返回参数
       //处理完标志
       result.State = 3;
 
     }
-
-
     return result;
   },
 
-  //工具函数@ web3js验证地址是否是合法地址 (单个地址) 3021
-  web_postisAddress:(data)=>{
-    console.log("工具函数@web_postisAddress的参数是：",data.address);
-    let result ={
-      sState:0,
-      sData:'',
-      sBz:[]
+  /**
+   * @  web_postisAddress {工具函数@ web3js验证地址是否是合法地址 (单个地址}
+   */
+  web_postisAddress: (data) => {
+    console.log("工具函数@web_postisAddress的参数是：", data.address);
+    let result = {
+      sState: 0,
+      sData: '',
+      sBz: []
     }
 
-    let  cData  = data.address;
-      if (web3.isAddress(cData)){
+    let cData = data.address;
+    if (web3.isAddress(cData)) {
 
-        result.sState = 2;
-      }else{
-        result.sState = 3;
-      }
-      return result;
+      result.sState = 2;
+    } else {
+      result.sState = 3;
+    }
+    return result;
   },
 
-  //工具函数@ post 0121 处理大表单数据分片以及数据校验 4052
+  /**
+   * @  web3_postVerifiCation_big {工具函数@ post处理大表单数据分片以及数据校验}
+   */
   web3_postVerifiCation_big: (data) => {
     //输出
     let param = data;
@@ -1635,272 +2017,292 @@ var Actions_Web3jsUtils = {
       ValidData: [],
       UnValidData: [],
       Bz: [],
-      sData:{
-        address:[],
-        value:[],
-        state:[]
+      sData: {
+        address: [],
+        value: [],
+        state: []
       }
     }
     //01. 判断数据是否为空
 
     //02. 判断地址和内容是否为空
-/*    for (let i in param) {
+    /*    for (let i in param) {
+          //01.首先判断2个参数都为空
+          if ((param[i].A == null || param[i].address == undefined || param[i].address == '') && (param[i].value == null || param[i].value == undefined || param[i].value == '')) {
+            //01.如果两位数据都是空
+            result.UnValid += 1;
+            //对象保存 序号：数据
+
+            let rows = {
+              no: +param[i].no,
+              address: param[i].address,
+              value: param[i].value,
+              state: Json_list.STATES_PAR.notAddressandValue.toString()
+            }
+            // let cData = {i:param[i].no,param[i].address,param[i].value,Json_list.STATES_PAR.CheckPass}};
+            result.UnValidData.push(rows);
+            //
+            continue;
+          } else {
+            console.log("411");
+            //02. 判断地址为空的情况
+            if (param[i].address == null || param[i].address == undefined || param[i].address == '') {
+              //
+              console.log("6");
+              result.UnValid += 1;
+              //对象保存 序号：数据
+              let rows = {
+                no: +param[i].no,
+                address: param[i].address,
+                value: param[i].value,
+                state: Json_list.STATES_PAR.notAddress.toString()
+              }
+              result.UnValidData.push(rows);
+              continue;
+            } else if (param[i].value == null || param[i].value == undefined || param[i].value == '') {
+              console.log("5");
+              result.UnValidData += 1;
+              //对象保存 序号：数据
+              let rows = {
+                no: +param[i].no,
+                address: param[i].address,
+                value: param[i].value,
+                state: Json_list.STATES_PAR.notValue.toString()
+              }
+
+              result.UnValidData.push(rows);
+              continue;
+            }
+          }
+          //02. 判断地址是否合法
+
+          if (!web3.isAddress(param[i].address)) {
+            console.log("423");
+            //如果不是有效地址
+            result.UnValid += 1;
+            //对象保存 序号：数据
+            let rows = {
+              no: +param[i].no,
+              address: param[i].address,
+              value: param[i].value,
+              state: Json_list.STATES_PAR.wrongAddress.toString()
+            }
+            result.UnValidData.push(rows);
+            continue;
+          } else {
+            console.log("地址校验通过");
+            //如果是有效地址
+            result.Valid += 1;
+            //对象保存 序号：数据
+            let rows = {
+              no: +param[i].no,
+              address: param[i].address,
+              value: param[i].value,
+              state: Json_list.STATES_PAR.CheckPass.toString()
+            }
+            result.ValidData.push(rows);
+            //分开追加数据
+            result.sData.address.push( param[i].address);
+            result.sData.value.push(  parseInt(param[i].value+'00000000'));
+          }
+          //数据处理完成后，返回参数
+          //处理完标志
+          result.State = 3;
+
+        }*/
+    for (let i in param) {
       //01.首先判断2个参数都为空
-      if ((param[i].A == null || param[i].address == undefined || param[i].address == '') && (param[i].value == null || param[i].value == undefined || param[i].value == '')) {
+      if ((param[i].A == null || param[i].A == undefined || param[i].A == '') && (param[i].B == null || param[i].B == undefined || param[i].B == '')) {
         //01.如果两位数据都是空
         result.UnValid += 1;
         //对象保存 序号：数据
-
         let rows = {
-          no: +param[i].no,
-          address: param[i].address,
-          value: param[i].value,
-          state: Json_list.STATES_PAR.notAddressandValue.toString()
+          no: i,
+          address: param[i].A,
+          value: param[i].B,
+          state: Json_list.STATES_PAR.notAandB.toString()
         }
-        // let cData = {i:param[i].no,param[i].address,param[i].value,Json_list.STATES_PAR.CheckPass}};
+        // let cData = {i:param[i].no,param[i].A,param[i].B,Json_list.STATES_PAR.CheckPass}};
         result.UnValidData.push(rows);
         //
         continue;
       } else {
-        console.log("411");
         //02. 判断地址为空的情况
-        if (param[i].address == null || param[i].address == undefined || param[i].address == '') {
-          //
-          console.log("6");
+        if (param[i].A == null || param[i].A == undefined || param[i].A == '') {
           result.UnValid += 1;
           //对象保存 序号：数据
           let rows = {
-            no: +param[i].no,
-            address: param[i].address,
-            value: param[i].value,
+            no: i,
+            address: param[i].A,
+            value: param[i].B,
             state: Json_list.STATES_PAR.notAddress.toString()
           }
           result.UnValidData.push(rows);
           continue;
-        } else if (param[i].value == null || param[i].value == undefined || param[i].value == '') {
-          console.log("5");
+        } else if (param[i].B == null || param[i].B == undefined || param[i].B == '') {
           result.UnValidData += 1;
           //对象保存 序号：数据
           let rows = {
-            no: +param[i].no,
-            address: param[i].address,
-            value: param[i].value,
+            no: i,
+            address: param[i].A,
+            value: param[i].B,
             state: Json_list.STATES_PAR.notValue.toString()
           }
-
           result.UnValidData.push(rows);
           continue;
         }
       }
       //02. 判断地址是否合法
-
-      if (!web3.isAddress(param[i].address)) {
-        console.log("423");
+      if (!web3.isAddress(param[i].A)) {
+        console.log("第" + i + "合约地址不合法");
         //如果不是有效地址
         result.UnValid += 1;
         //对象保存 序号：数据
         let rows = {
-          no: +param[i].no,
-          address: param[i].address,
-          value: param[i].value,
+          no: i,
+          address: param[i].A,
+          value: param[i].B,
           state: Json_list.STATES_PAR.wrongAddress.toString()
         }
         result.UnValidData.push(rows);
         continue;
       } else {
-        console.log("地址校验通过");
+        // console.log("地址校验通过",i);
         //如果是有效地址
         result.Valid += 1;
         //对象保存 序号：数据
         let rows = {
-          no: +param[i].no,
-          address: param[i].address,
-          value: param[i].value,
+          no: i,
+          address: param[i].A,
+          value: param[i].B,
           state: Json_list.STATES_PAR.CheckPass.toString()
         }
         result.ValidData.push(rows);
         //分开追加数据
-        result.sData.address.push( param[i].address);
-        result.sData.value.push(  parseInt(param[i].value+'00000000'));
+        result.sData.address.push(param[i].A);
+        // TODO: 转换参数
+        let sNum = (parseFloat(param[i].B).toFixed(8)) * unitlength;
+        // let value = web3.toBigNumber(sNum);
+        result.sData.value.push(sNum);
       }
       //数据处理完成后，返回参数
       //处理完标志
       result.State = 3;
-
-    }*/
-    for (let i in param) {
-     //01.首先判断2个参数都为空
-     if ((param[i].A == null || param[i].A == undefined || param[i].A == '') && (param[i].B == null || param[i].B == undefined || param[i].B == '')) {
-       //01.如果两位数据都是空
-       result.UnValid += 1;
-       //对象保存 序号：数据
-       let rows = {
-         no: i,
-         address: param[i].A,
-         value: param[i].B,
-         state: Json_list.STATES_PAR.notAandB.toString()
-       }
-       // let cData = {i:param[i].no,param[i].A,param[i].B,Json_list.STATES_PAR.CheckPass}};
-       result.UnValidData.push(rows);
-       //
-       continue;
-     } else {
-       //02. 判断地址为空的情况
-       if (param[i].A == null || param[i].A == undefined || param[i].A == '') {
-         result.UnValid += 1;
-         //对象保存 序号：数据
-         let rows = {
-           no: i,
-           address: param[i].A,
-           value: param[i].B,
-           state: Json_list.STATES_PAR.notAddress.toString()
-         }
-         result.UnValidData.push(rows);
-         continue;
-       } else if (param[i].B == null || param[i].B == undefined || param[i].B == '') {
-         result.UnValidData += 1;
-         //对象保存 序号：数据
-         let rows = {
-           no: i,
-           address: param[i].A,
-           value: param[i].B,
-           state: Json_list.STATES_PAR.notValue.toString()
-         }
-         result.UnValidData.push(rows);
-         continue;
-       }
-     }
-     //02. 判断地址是否合法
-     if (!web3.isAddress(param[i].A)) {
-       console.log("第"+i+"合约地址不合法");
-       //如果不是有效地址
-       result.UnValid += 1;
-       //对象保存 序号：数据
-       let rows = {
-         no: i,
-         address: param[i].A,
-         value: param[i].B,
-         state: Json_list.STATES_PAR.wrongAddress.toString()
-       }
-       result.UnValidData.push(rows);
-       continue;
-     } else {
-       // console.log("地址校验通过",i);
-       //如果是有效地址
-       result.Valid += 1;
-       //对象保存 序号：数据
-       let rows = {
-         no: i,
-         address: param[i].A,
-         value: param[i].B,
-         state: Json_list.STATES_PAR.CheckPass.toString()
-       }
-       result.ValidData.push(rows);
-       //分开追加数据
-       result.sData.address.push( param[i].A);
-       // TODO: 转换参数
-       let sNum = (parseFloat(param[i].B).toFixed(8))*unitlength;
-       // let value = web3.toBigNumber(sNum);
-       result.sData.value.push(sNum);
-     }
-     //数据处理完成后，返回参数
-     //处理完标志
-     result.State = 3;
-   }
+    }
 
     return result;
   },
 
+  /**
+   * @  web3_cuttingunitarray {工具函数@ 大数据集切割分片}
+   */
   web3_cuttingunitarray: (data) => {
     // TODO:切割因子
     console.log("开始切割数组......");
     // TODO: 分片大小，暂时给死
     let lengths = 200;
     let data_length = data.address.length;
-    console.log("长度是",data_length);
+    console.log("长度是", data_length);
     let arrbj = {
-      no:0,
-      address:"",
-      value:""
-    };//临时数组
-    let arr_address =[];
+      no: 0,
+      address: "",
+      value: ""
+    }; //临时数组
+    let arr_address = [];
     let arr_value = [];
     let arr_no = [];
-    let brr = [];//返回数组
+    let brr = []; //返回数组
 
     //首先做一个判断，条数是否相等
-    if (data.address.length != data.value.length){
-        //如果两个参数数量不同，直接返回
-        console.log("参数数量不同");
-          return;
+    if (data.address.length != data.value.length) {
+      //如果两个参数数量不同，直接返回
+      console.log("参数数量不同");
+      return;
     }
 
     //数据处理
-    for(let i=0;i<data_length;i++){
+    for (let i = 0; i < data_length; i++) {
+      //
+      // console.log("循环",i);
+      let is = i + 1;
+      if (is % lengths == 0) {
+        //单位切割组装
+        // TODO:
+        //填充切割数组
+        console.log("填装", i);
+        brr.push({
+          "address": arr_address,
+          "value": arr_value
+        });
+        //清空临时数组
+        arr_address = [];
+        arr_value = [];
+      }
+      //捕捉最后一段数据
+      if (data_length - lengths < lengths) {
         //
-        // console.log("循环",i);
-          let is = i+1;
-        if(is%lengths==0){
-          //单位切割组装
-          // TODO:
-          //填充切割数组
-          console.log("填装",i);
-          brr.push({"address":arr_address,"value":arr_value});
-          //清空临时数组
-          arr_address = [];
-          arr_value = [];
-        }
-        //捕捉最后一段数据
-        if(data_length-lengths<lengths){
-          //
-          console.log("最后填装",i);
-          brr.push({"address":arr_address,"value":arr_value});
-          //清空临时数组
-          arr_address = [];
-          arr_value = [];
-          break;
-        }
-        //
-        //封装对象
-        let rowdata = {"no":i,"address":data.address[i],"value":data.value[i]};//对象拼接方法，但是不能这样拼接，因为要拆成一串，所以要追加
-        //追加
-        arr_address.push(data.address[i]);
-        arr_value.push(data.value[i]);
-        //
+        console.log("最后填装", i);
+        brr.push({
+          "address": arr_address,
+          "value": arr_value
+        });
+        //清空临时数组
+        arr_address = [];
+        arr_value = [];
+        break;
+      }
+      //
+      //封装对象
+      let rowdata = {
+        "no": i,
+        "address": data.address[i],
+        "value": data.value[i]
+      }; //对象拼接方法，但是不能这样拼接，因为要拆成一串，所以要追加
+      //追加
+      arr_address.push(data.address[i]);
+      arr_value.push(data.value[i]);
+      //
 
-        // arrbj.no += i;
-        // arrbj.address=data.address[i];
-        // arrbj.value = data.value[i];
-        //
-        }
-        // console.log("切割后的数组是：=>",brr);
-        return brr;
+      // arrbj.no += i;
+      // arrbj.address=data.address[i];
+      // arrbj.value = data.value[i];
+      //
+    }
+    // console.log("切割后的数组是：=>",brr);
+    return brr;
   },
 
+  /**
+   * @  web3_currentProvider {工具函数@ 获取当前web3provider}
+   */
   web3_currentProvider: (data) => {
     // TODO:
   }
 }
+
 //8.Actions_Contrant_Token=>skt测试代币的相关方法的实现(Token)
 var Actions_Contrant_Token = {
-  /*方法说明
+
+  /**方法说明
    *@method T_transferFrom 方法名
    *@for Actions_Contrant_Token 所属
    *@param{{1:_from(address),2:_value(uint256)}}参数名 参数说明
    *@return {1:hash} 返回值说明
    */
-  T_Test: async (data) => { //34531
+
+  //测试方法
+  T_Test: async (data) => {
     // TODO:
     let cData = data;
     console.log("调用合约方法-Token-T_Test...", cData.data);
     let parsm = cData.data;
     //参数
-    let resultData ={
-      Sum:0,
-      Normal:0,
-      Unnormal:0,
-      Data:[],
-      unData:[]
+    let resultData = {
+      Sum: 0,
+      Normal: 0,
+      Unnormal: 0,
+      Data: [],
+      unData: []
     }; //结果集
     let Parames_data = {
       Type: {
@@ -1925,60 +2327,69 @@ var Actions_Contrant_Token = {
     }
     //  04. 打包数据
     //循环处理
-    for(let i=0;i<1;i++){
-        //  序号 i
-        //
-        console.log("批量处理数据：",i);
-        resultData.Sum+=1;//总量加一
+    for (let i = 0; i < 1; i++) {
+      //  序号 i
+      //
+      console.log("批量处理数据：", i);
+      resultData.Sum += 1; //总量加一
 
-        let Parames_row = {
-          Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
-          Tx_gasPrice: web3.toHex(web3.eth.gasPrice),
-          Tx_gasLimit: web3.toHex(90000),
-          Tx_from: Parames_address.fromAddress,
-          Tx_to: Parames_address.contractAddress,
-          Tx_value: "0x0",
-          //// TODO:
-          Tx_data: Contract_Token.transfer.getData(parsm.ValidData[i].address,parsm.ValidData[i].value, {
-            from: Parames_address.fromAddress
-          })
-        }
-        //  05. 对接数据
-        let rawTx = {
-          nonce: Parames_row.Tx_nonce,
-          gasPrice: Parames_row.Tx_gasPrice, // TODO:
-          gasLimit: Parames_row.Tx_gasLimit,
-          from: Parames_row.Tx_from,
-          to: Parames_row.Tx_to,
-          value: Parames_row.Tx_value, // TODO:
-          data: Parames_row.Tx_data
-        }
-        // 06.签名编译
-        let SignData = Actions_CommonTool.Tool_SignData({//3483
-          rawTx: rawTx,
-          key: Json_list.PRIVATEKEY.Drop_privateKey
-        });
-        result = await web3.eth.sendRawTransaction(SignData);
-        //
-          resultData.Normal+=1;//通过参数+1
-          let  cData = {i:result}
-          resultData.Data.push(cData);
+      let Parames_row = {
+        Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
+        Tx_gasPrice: web3.toHex(web3.eth.gasPrice),
+        Tx_gasLimit: web3.toHex(90000),
+        Tx_from: Parames_address.fromAddress,
+        Tx_to: Parames_address.contractAddress,
+        Tx_value: "0x0",
+        //// TODO:
+        Tx_data: Contract_Token.transfer.getData(parsm.ValidData[i].address, parsm.ValidData[i].value, {
+          from: Parames_address.fromAddress
+        })
+      }
+      //  05. 对接数据
+      let rawTx = {
+        nonce: Parames_row.Tx_nonce,
+        gasPrice: Parames_row.Tx_gasPrice, // TODO:
+        gasLimit: Parames_row.Tx_gasLimit,
+        from: Parames_row.Tx_from,
+        to: Parames_row.Tx_to,
+        value: Parames_row.Tx_value, // TODO:
+        data: Parames_row.Tx_data
+      }
+      // 06.签名编译
+      let SignData = Actions_CommonTool.Tool_SignData({ //3483
+        rawTx: rawTx,
+        key: Json_list.PRIVATEKEY.Drop_privateKey
+      });
+      result = await web3.eth.sendRawTransaction(SignData);
+      //
+      resultData.Normal += 1; //通过参数+1
+      let cData = {
+        i: result
+      }
+      resultData.Data.push(cData);
     }
-    console.log("----发送交易返回数据是：",result);
+    console.log("----发送交易返回数据是：", result);
     return result;
   },
-  T_Test_Batch: async (data) => { //34531
+
+  /**方法说明
+   *@method T_Test_Batch 方法名
+   *@for Actions_Contrant_Token 所属
+   *@param{{1:_from(address),2:_value(uint256)}}参数名 参数说明
+   *@return {1:hash} 返回值说明
+   */
+  T_Test_Batch: async (data) => {
     // TODO:
     let cData = data;
     console.log("调用合约方法-Token-T_Test_Batch...", cData.data);
     let parsm = cData.data;
     //参数
-    let resultData ={
-      Sum:0,
-      Normal:0,
-      Unnormal:0,
-      Data:[],
-      unData:[]
+    let resultData = {
+      Sum: 0,
+      Normal: 0,
+      Unnormal: 0,
+      Data: [],
+      unData: []
     }; //结果集
     let Parames_data = {
       Type: {
@@ -2003,50 +2414,53 @@ var Actions_Contrant_Token = {
     }
     //  04. 打包数据
     //循环处理
-    for(let i=0;i<1;i++){
-        //  序号 i
-        //
-        console.log("批量处理数据：",i);
-        resultData.Sum+=1;//总量加一
-        //
-        let Parames_row = {
+    for (let i = 0; i < 1; i++) {
+      //  序号 i
+      //
+      console.log("批量处理数据：", i);
+      resultData.Sum += 1; //总量加一
+      //
+      let Parames_row = {
 
-          Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
-          Tx_gasPrice: web3.toHex(web3.eth.gasPrice),
-          Tx_gasLimit: web3.toHex(200000),
-          Tx_from: Parames_address.fromAddress,
-          Tx_to: Parames_address.contractAddress,
-          Tx_value: "0x0",
-          //// TODO:
-          Tx_data: Contract_Drop.multiSend.getData(parsm.sData.address,parsm.sData.value, {
-            from: Parames_address.fromAddress
-          })
-        }
-        //  05. 对接数据
-        let rawTx = {
-          nonce: Parames_row.Tx_nonce,
-          gasPrice: Parames_row.Tx_gasPrice, // TODO:
-          gasLimit: Parames_row.Tx_gasLimit,
-          from: Parames_row.Tx_from,
-          to: Parames_row.Tx_to,
-          value: Parames_row.Tx_value, // TODO:
-          data: Parames_row.Tx_data
-        }
-        // 06.签名编译
-        let SignData = Actions_CommonTool.Tool_SignData({//3483
-          rawTx: rawTx,
-          key: Json_list.PRIVATEKEY.Drop_privateKey
-        });
-        result = await web3.eth.sendRawTransaction(SignData);
-        //
-          resultData.Normal+=1;//通过参数+1
-          let  cData = {i:result}
-          resultData.Data.push(cData);
+        Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
+        Tx_gasPrice: web3.toHex(web3.eth.gasPrice),
+        Tx_gasLimit: web3.toHex(200000),
+        Tx_from: Parames_address.fromAddress,
+        Tx_to: Parames_address.contractAddress,
+        Tx_value: "0x0",
+        //// TODO:
+        Tx_data: Contract_Drop.multiSend.getData(parsm.sData.address, parsm.sData.value, {
+          from: Parames_address.fromAddress
+        })
+      }
+      //  05. 对接数据
+      let rawTx = {
+        nonce: Parames_row.Tx_nonce,
+        gasPrice: Parames_row.Tx_gasPrice, // TODO:
+        gasLimit: Parames_row.Tx_gasLimit,
+        from: Parames_row.Tx_from,
+        to: Parames_row.Tx_to,
+        value: Parames_row.Tx_value, // TODO:
+        data: Parames_row.Tx_data
+      }
+      // 06.签名编译
+      let SignData = Actions_CommonTool.Tool_SignData({ //3483
+        rawTx: rawTx,
+        key: Json_list.PRIVATEKEY.Drop_privateKey
+      });
+      result = await web3.eth.sendRawTransaction(SignData);
+      //
+      resultData.Normal += 1; //通过参数+1
+      let cData = {
+        i: result
+      }
+      resultData.Data.push(cData);
     }
-    console.log("----发送交易返回数据是：",result);
+    console.log("----发送交易返回数据是：", result);
     return result;
   },
-  /*方法说明
+
+  /**方法说明
    *@method T_transferFrom 方法名
    *@for Actions_Contrant_Token 所属
    *@param{{1:_from(address),2:_value(uint256)}}参数名 参数说明
@@ -2110,7 +2524,8 @@ var Actions_Contrant_Token = {
     result = await web3.eth.sendRawTransaction(SignData);
     return result;
   },
-  /*方法说明
+
+  /**方法说明
    *@method T_transfer 方法名
    *@for Actions_Contrant_Token 所属
    *@param{{1:_to(address),2:_value(uint256)}}参数名 参数说明
@@ -2173,7 +2588,8 @@ var Actions_Contrant_Token = {
     result = await web3.eth.sendRawTransaction(SignData);
     return result;
   },
-  /*方法说明
+
+  /**方法说明
    *@method T_balanceOf 方法名
    *@for Actions_Contrant_Token 所属
    *@param{{1:_owner(address)}}参数名 参数说明
@@ -2234,7 +2650,8 @@ var Actions_Contrant_Token = {
     result = await web3.eth.sendRawTransaction(SignData);
     return result;
   },
-  /*方法说明
+
+  /**方法说明
    *@method T_approve 方法名
    *@for Actions_Contrant_Token 所属
    *@param{{1:spender(address),2:value(uint256)}}参数名 参数说明
@@ -2297,7 +2714,8 @@ var Actions_Contrant_Token = {
     result = await web3.eth.sendRawTransaction(SignData);
     return result;
   },
-  /*方法说明
+
+  /**方法说明
    *@method T_allowance 方法名
    *@for Actions_Contrant_Token 所属
    *@param{{1:_owner(address),2:_spender(address)}}参数名 参数说明
@@ -2361,10 +2779,11 @@ var Actions_Contrant_Token = {
     return result;
   }
 }
+
 //9.Actions_Contrant_Drop=> 空投合约的相关方法的实现(Drop)
 var Actions_Contrant_Drop = {
 
-  /*方法说明
+  /**方法说明
    *@method D_setToken :设置代币种类  //设置代币
    *@for Actions_Contrant_Drop 所属
    *@param{{1:_token(address)}}参数名 参数说明
@@ -2372,15 +2791,15 @@ var Actions_Contrant_Drop = {
    */
   D_setToken: async (data) => {
     //参数
-    console.log("调用合约方法-Token-D_setToken...",data);
-    console.log("合约方法的初始化地址是3021:",data.data.address);
+    console.log("调用合约方法-Token-D_setToken......");
+    console.log("合约方法的初始化地址是=>", data.data.address);
     let result; //结果集
     let Parames_data = {
       Type: {
         param1: "address _token"
       },
       Value: {
-        address:data.data.address
+        address: data.data.address
       }
     }
     // let data;
@@ -2423,10 +2842,11 @@ var Actions_Contrant_Drop = {
     });
     //07.  发送
     result = await web3.eth.sendRawTransaction(SignData);
-    console.log("setToken :",result);
+    console.log("setToken :", result);
     return result;
   },
-  /*方法说明
+
+  /**方法说明
    *@method D_multiSendandself
    *@for Actions_Contrant_Drop 所属
    *@param{{1:_destAddrs(address[],2:_valuesmyself(uint256[]),3:_valuesmyself(uint256))}}参数名 参数说明
@@ -2510,9 +2930,8 @@ var Actions_Contrant_Drop = {
     }
     return result;
   },
-  //
 
-  /*方法说明
+  /**方法说明
    *@method D_multiSend_ed 大文件操作
    *@for Actions_Contrant_Drop 所属
    *@param{{1:_destAddrs(address[],2:_valuesmyself(uint256[]))}}参数名 参数说明
@@ -2520,28 +2939,23 @@ var Actions_Contrant_Drop = {
    */
   D_multiSend_ed: async (data) => {
     // TODO:
-    let  result;
+    let result;
     let cData = data.data;
     let SignData;
     //参数
-     let resultData ={
-      Sum:0,
-      Normal:0,
-      Unnormal:0,
-      Data:[],
-      unData:[]
+    let resultData = {
+      Sum: 0,
+      Normal: 0,
+      Unnormal: 0,
+      Data: [],
+      unData: []
     };
 
     console.log("调用合约方法-Token-D_multiSend...", cData);
     let parsm = cData.data.sData;
-
-    // console.log("D_multiSend的数据：length4323",parsm.address.length);
-    // console.log("D_multiSend的数据：address4323",parsm.address);
-    // console.log("D_multiSend的数据：value5878",parsm.value);
-
     // TODO: 数据分片
-    let resusltData   =   Actions_Web3jsUtils.web3_cuttingunitarray(parsm);
-    let lengths =  resusltData.length;
+    let resusltData = Actions_Web3jsUtils.web3_cuttingunitarray(parsm);
+    let lengths = resusltData.length;
     // console.log("切割后的数组是===========>",resusltData.length);
     // console.log("切割后的数组是===========>",resusltData);
     // console.log("切割后的数组是===========>",resusltData[0].address);
@@ -2604,72 +3018,69 @@ var Actions_Contrant_Drop = {
     //        // console.log("返回的hash是：",result);
     // };
 
-        ///
-        //获取数据
-        let  address_list = resusltData[0].address;
-        let  value_list = resusltData[0].value;
-        //封装数据
+    ///
+    //获取数据
+    let address_list = resusltData[0].address;
+    let value_list = resusltData[0].value;
+    //封装数据
 
-        let Parames_row = {
-          Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
-          Tx_gasPrice: web3.toHex((web3.eth.gasPrice)*1.2),
-          Tx_gasLimit: web3.toHex(800000),
-          Tx_from: Parames_address.fromAddress,
-          Tx_to: Parames_address.contractAddress,
-          Tx_value: "0x0",
-              //// TODO:
-          Tx_data: Contract_Drop.multiSend.getData(address_list,value_list, {
-          from: Parames_address.fromAddress
-            })
-        }
+    let Parames_row = {
+      Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
+      Tx_gasPrice: web3.toHex((web3.eth.gasPrice) * 1.2),
+      Tx_gasLimit: web3.toHex(800000),
+      Tx_from: Parames_address.fromAddress,
+      Tx_to: Parames_address.contractAddress,
+      Tx_value: "0x0",
+      //// TODO:
+      Tx_data: Contract_Drop.multiSend.getData(address_list, value_list, {
+        from: Parames_address.fromAddress
+      })
+    }
 
-        //对接数据
-        let rawTx = {
-          nonce: Parames_row.Tx_nonce,
-          gasPrice: Parames_row.Tx_gasPrice, // TODO:
-          gasLimit: Parames_row.Tx_gasLimit,
-          from: Parames_row.Tx_from,
-          to: Parames_row.Tx_to,
-          value: Parames_row.Tx_value, // TODO:
-          data: Parames_row.Tx_data
-        }
+    //对接数据
+    let rawTx = {
+      nonce: Parames_row.Tx_nonce,
+      gasPrice: Parames_row.Tx_gasPrice, // TODO:
+      gasLimit: Parames_row.Tx_gasLimit,
+      from: Parames_row.Tx_from,
+      to: Parames_row.Tx_to,
+      value: Parames_row.Tx_value, // TODO:
+      data: Parames_row.Tx_data
+    }
 
-        //签名编译
-         SignData = Actions_CommonTool.Tool_SignData({//签名
-            rawTx: rawTx,
-            key: Json_list.PRIVATEKEY.Drop_privateKey
-          });
-        // 获取签名数据,发送交易
-        // console.log("开始发送交易",i);
-        result = await web3.eth.sendRawTransaction(SignData);
-         console.log("返回的hash是：",result);
-        // web3.eth.sendRawTransaction(SignData,(err,hash)=>{
-        //     if (!err){
-        //      console.log("返回的hash值是:",hash);
-        //       }else{
-        //      console.log("err",err);
-        //       }
-        //     });
-             // result = await web3.eth.sendRawTransaction(SignData);
-             // console.log("返回的hash是：",result);
-      return result;
+    //签名编译
+    SignData = Actions_CommonTool.Tool_SignData({ //签名
+      rawTx: rawTx,
+      key: Json_list.PRIVATEKEY.Drop_privateKey
+    });
+    // 获取签名数据,发送交易
+    // console.log("开始发送交易",i);
+    result = await web3.eth.sendRawTransaction(SignData);
+    console.log("返回的hash是：", result);
+    // web3.eth.sendRawTransaction(SignData,(err,hash)=>{
+    //     if (!err){
+    //      console.log("返回的hash值是:",hash);
+    //       }else{
+    //      console.log("err",err);
+    //       }
+    //     });
+    // result = await web3.eth.sendRawTransaction(SignData);
+    // console.log("返回的hash是：",result);
+    return result;
   },
 
   //批量空投测试
-  D_multiSend_Test:async(data)=>{
+  D_multiSend_Test: async (data) => {
     //
-    let  result;
+    let result;
     let cData = data;
-    // let SignData;
     //参数
-    //结果集
-    //参数
-    let resultData ={
-      Sum:0,
-      Normal:0,
-      Unnormal:0,
-      Data:[],
-      unData:[]
+    let resultData = {
+      Sum: 0,
+      Normal: 0,
+      Unnormal: 0,
+      Data: [],
+      unData: []
     };
     // let data;
     let Parames_address = {
@@ -2683,28 +3094,28 @@ var Actions_Contrant_Drop = {
     // console.log("调用合约方法-Token-D_multiSend_Test...", cData);
     let parsm = cData.data.sData;
     //
-    let resusltData  = Actions_Web3jsUtils.web3_cuttingunitarray(parsm);
+    let resusltData = Actions_Web3jsUtils.web3_cuttingunitarray(parsm);
     let lengths = resusltData.length;
     //循环交易
-    for(let i = 0;i<lengths;i++){
+    for (let i = 0; i < lengths; i++) {
       //
-      let  address_list = resusltData[i].address;
-      let  value_list = resusltData[i].value;
+      let address_list = resusltData[i].address;
+      let value_list = resusltData[i].value;
       // console.log("address:",address_list);
       // console.log("value:",value_list);
-      console.log("发送块:",i);
+      console.log("发送块:", i);
       //序列化数据
       let Parames_row = {
-        Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
-        Tx_gasPrice: web3.toHex((web3.eth.gasPrice)*10),
+        Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)+i),
+        Tx_gasPrice: web3.toHex((web3.eth.gasPrice) * 10),
         Tx_gasLimit: web3.toHex(8000000),
         Tx_from: Parames_address.fromAddress,
         Tx_to: Parames_address.contractAddress,
         Tx_value: "0x0",
-            //// TODO:
-        Tx_data: Contract_Drop.multiSend.getData(address_list,value_list, {
-        from: Parames_address.fromAddress
-          })
+        //// TODO:
+        Tx_data: Contract_Drop.multiSend.getData(address_list, value_list, {
+          from: Parames_address.fromAddress
+        })
       };
       //
       //  05. 对接数据
@@ -2717,29 +3128,29 @@ var Actions_Contrant_Drop = {
         value: Parames_row.Tx_value, // TODO:
         data: Parames_row.Tx_data
       }
-          // 06.签名编译
-      let SignData = Actions_CommonTool.Tool_SignData({//3483
-            rawTx: rawTx,
-            key: Json_list.PRIVATEKEY.Drop_privateKey
-        });
-          // result = await web3.eth.sendRawTransaction(SignData);
-      web3.eth.sendRawTransaction(SignData,(err,hash)=>{
-          if (!err){
-                 console.log("hash-----------",i,hash);
-           }else{
-                 console.log("err",err);
-          }
+      // 06.签名编译
+      let SignData = Actions_CommonTool.Tool_SignData({ //3483
+        rawTx: rawTx,
+        key: Json_list.PRIVATEKEY.Drop_privateKey
       });
-      console.log("----发送交易返回数据是：",i,result);
+      // result = await web3.eth.sendRawTransaction(SignData);
+      web3.eth.sendRawTransaction(SignData, (err, hash) => {
+        if (!err) {
+          console.log("hash-----------", i, hash);
+        } else {
+          console.log("err", err);
+        }
+      });
+      console.log("----发送交易返回数据是：", i, result);
       //sleep
-      console.log('暂停中........60秒',i);
-      await sleep(1000*60);
-      console.log("开始...",i);
+      console.log('暂停中........60秒', i);
+      await sleep(1000 * 60);
+      console.log("开始...", i);
     }
-      return result;
+    return result;
   },
 
-  /*方法说明
+  /**方法说明
    *@method D_multiSend
    *@for Actions_Contrant_Drop 所属
    *@param{{1:_destAddrs(address[],2:_valuesmyself(uint256[]))}}参数名 参数说明
@@ -2747,20 +3158,20 @@ var Actions_Contrant_Drop = {
    */
   D_multiSend: async (data) => {
     // TODO:
-    let  result;
+    let result;
     let cData = data;
     console.log("调用合约方法-Token-D_multiSend...", cData);
     let parsm = cData.data;
-    console.log("D_multiSend的数据：address",parsm.sData.address);
-    console.log("D_multiSend的数据：value",parsm.sData.value);
+    console.log("D_multiSend的数据：address", parsm.sData.address);
+    console.log("D_multiSend的数据：value", parsm.sData.value);
 
     //参数
-    let resultData ={
-      Sum:0,
-      Normal:0,
-      Unnormal:0,
-      Data:[],
-      unData:[]
+    let resultData = {
+      Sum: 0,
+      Normal: 0,
+      Unnormal: 0,
+      Data: [],
+      unData: []
     }; //结果集
     let Parames_data = {
       Type: {
@@ -2792,40 +3203,41 @@ var Actions_Contrant_Drop = {
       Tx_from: Parames_address.fromAddress,
       Tx_to: Parames_address.contractAddress,
       Tx_value: "0x0",
-          //// TODO:
-      Tx_data: Contract_Drop.multiSend.getData(parsm.sData.address,parsm.sData.value, {
-      from: Parames_address.fromAddress
-        })
+      //// TODO:
+      Tx_data: Contract_Drop.multiSend.getData(parsm.sData.address, parsm.sData.value, {
+        from: Parames_address.fromAddress
+      })
     }
 
-        //  05. 对接数据
-        let rawTx = {
-          nonce: Parames_row.Tx_nonce,
-          gasPrice: Parames_row.Tx_gasPrice, // TODO:
-          gasLimit: Parames_row.Tx_gasLimit,
-          from: Parames_row.Tx_from,
-          to: Parames_row.Tx_to,
-          value: Parames_row.Tx_value, // TODO:
-          data: Parames_row.Tx_data
-        }
-            // 06.签名编译
-            let SignData = Actions_CommonTool.Tool_SignData({//3483
-              rawTx: rawTx,
-              key: Json_list.PRIVATEKEY.Drop_privateKey
-            });
-            // result = await web3.eth.sendRawTransaction(SignData);
-             web3.eth.sendRawTransaction(SignData,(err,hash)=>{
-                 if (!err){
-                   console.log("hash-----------",hash);
-                 }else{
-                   console.log("err",err);
-                 }
-             })
+    //  05. 对接数据
+    let rawTx = {
+      nonce: Parames_row.Tx_nonce,
+      gasPrice: Parames_row.Tx_gasPrice, // TODO:
+      gasLimit: Parames_row.Tx_gasLimit,
+      from: Parames_row.Tx_from,
+      to: Parames_row.Tx_to,
+      value: Parames_row.Tx_value, // TODO:
+      data: Parames_row.Tx_data
+    }
+    // 06.签名编译
+    let SignData = Actions_CommonTool.Tool_SignData({ //3483
+      rawTx: rawTx,
+      key: Json_list.PRIVATEKEY.Drop_privateKey
+    });
+    // result = await web3.eth.sendRawTransaction(SignData);
+    web3.eth.sendRawTransaction(SignData, (err, hash) => {
+      if (!err) {
+        console.log("hash-----------", hash);
+      } else {
+        console.log("err", err);
+      }
+    })
 
-            console.log("----发送交易返回数据是：",result);
-            return result;
+    console.log("----发送交易返回数据是：", result);
+    return result;
   },
-  /*方法说明
+
+  /**方法说明
    *@method D_multiSend2
    *@for Actions_Contrant_Drop 所属
    *@param{{1:_destAddrs(address[],2:_values(uint256[]) )}}参数名 参数说明
@@ -2891,16 +3303,18 @@ var Actions_Contrant_Drop = {
     result = await web3.eth.sendRawTransaction(SignData);
     return result;
   },
-  /*方法说明
+
+  /**方法说明
    *@method D_multiself
    *@for Actions_Contrant_Drop 所属
    *@param{{1:_values(uint256),2:addres_owner(address))}}参数名 参数说明
    *@return {1:hash} 返回值说明
    */
   D_multiself: async (data) => {
-    //参数
-    console.log("调用合约方法-D_multiSendandself...");
+    //01. 参数
+    console.log("调用合约方法-D_multiself...");
     let result; //结果集
+    //02. 参数格式
     let Parames_data = {
       Type: {
 
@@ -2909,38 +3323,33 @@ var Actions_Contrant_Drop = {
         param3: "uint256 _valuesmyself"
       },
       Value: {
-        // param1:data.destAddrs,
-        // param2:data.values,
-        // param3:data.valuesmyself
-        // param1:data.destAddrs,
-        // param2:data.values,
-        // param3:data.valuesmyself
+        param1: data.values, //地址
+        param2: data.destAddrs, //代币数
       }
     }
-    // let data;
-    // TODO:
+    //03. 合约地址信息
     let Parames_address = {
       //合约地址
-      contractAddress: "0xaA3A01dBa149B109d5e9090f1ad1f2cEbA1C272a",
+      contractAddress: Json_list.PARANES_ADDRESS.contractAddress,
       //发送者
-      fromAddress: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105",
+      fromAddress: Json_list.PARANES_ADDRESS.fromAddress,
       //调用者
-      toAddress: "0xd2580AB2EB3313B0972e9e47b05eE4c15320A6D1"
+      toAddress: Json_list.PARANES_ADDRESS.toAddress
     }
-    //  04. 打包数据
+    //04. 打包数据
     let Parames_row = {
-      Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
-      Tx_gasPrice: web3.toHex(web3.eth.gasPrice),
-      Tx_gasLimit: web3.toHex(90000),
+      Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)), //TODO 配置
+      Tx_gasPrice: web3.toHex(web3.eth.gasPrice), // TODO:配置
+      Tx_gasLimit: web3.toHex(8000000), // TODO:配置
       Tx_from: Parames_address.fromAddress,
       Tx_to: Parames_address.contractAddress,
       Tx_value: "0x0",
       // TODO:
-      Tx_data: Contract_Drop.multiSendandself.getData(Parames_data.Value.param1, Parames_data.Value.param2, Parames_data.Value.param3, {
+      Tx_data: Contract_Drop.multiself.getData(Parames_data.Value.param1, Parames_data.Value.param2, {
         from: Parames_address.fromAddress
       })
-    }
-    //  05  对接数据
+    };
+    //05. 对接数据
     let rawTx = {
       nonce: Parames_row.Tx_nonce,
       gasPrice: Parames_row.Tx_gasPrice, // TODO:
@@ -2950,60 +3359,62 @@ var Actions_Contrant_Drop = {
       value: Parames_row.Tx_value, // TODO:
       data: Parames_row.Tx_data
     }
-    //06.获取处理后的数据
+    //06. 获取处理后的数据
     let SignData = Actions_CommonTool.Tool_SignData({
       rawTx: rawTx,
       key: Json_list.PRIVATEKEY.Token_privateKey
     });
     //07.  发送
     result = await web3.eth.sendRawTransaction(SignData);
+    console.log("返回的hash是：=>", result);
+    //08. 返回
     return result;
   },
-  /*方法说明
+
+  /**方法说明
    *@method D_settrustOwner 存入白名单
    *@for Actions_Contrant_Drop 所属
    *@param{{1:_values(uint256),2:addres_owner(address))}}参数名 参数说明
    *@return {1:hash} 返回值说明
    */
   D_settrustOwner: async (data) => {
-    //参数
+    //01. 参数
     console.log("调用合约方法-Token-D_settrustOwner...");
     let result; //结果集
-    //
+    //02. 参数格式
     let Parames_data = {
       Type: {
-        param1: "address _ownaddress",
-        param2: "string memory _owntext"
+        param1: "uint256 _values",
+        param2: "address addres_owner"
       },
       Value: {
-        ownaddress: data.ownaddress,
-        owntext: data.owntext
+        param1: data.values, //备注
+        param2: data.destAddrs, //地址
       }
     }
-    // let data;
-    // TODO:
+    //03. 合约地址信息
     let Parames_address = {
       //合约地址
-      contractAddress: "0xaA3A01dBa149B109d5e9090f1ad1f2cEbA1C272a",
+      contractAddress: Json_list.PARANES_ADDRESS.contractAddress,
       //发送者
-      fromAddress: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105",
+      fromAddress: Json_list.PARANES_ADDRESS.fromAddress,
       //调用者
-      toAddress: "0xd2580AB2EB3313B0972e9e47b05eE4c15320A6D1"
+      toAddress: Json_list.PARANES_ADDRESS.toAddress
     }
-    //  04. 打包数据
+    //04. 打包数据
     let Parames_row = {
-      Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
-      Tx_gasPrice: web3.toHex(web3.eth.gasPrice),
-      Tx_gasLimit: web3.toHex(90000),
-      Tx_from: Parames_address.fromAddress,
+      Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)), //TODO 配置 这里是发送者
+      Tx_gasPrice: web3.toHex(web3.eth.gasPrice), // TODO:配置 gas
+      Tx_gasLimit: web3.toHex(8000000), // TODO:配置 Gaslimit
+      Tx_from: Parames_address.fromAddress, //
       Tx_to: Parames_address.contractAddress,
       Tx_value: "0x0",
-      // TODO:
-      Tx_data: Contract_Drop.settrustOwner.getData(Parames_data.Value.ownaddress, Parames_data.Value.owntext, {
+      // TODO:封装 函数 +参数
+      Tx_data: Contract_Drop.settrustOwner.getData(Parames_data.Value.param1, Parames_data.Value.param2, {
         from: Parames_address.fromAddress
       })
-    }
-    //  05  对接数据
+    };
+    //05. 对接数据
     let rawTx = {
       nonce: Parames_row.Tx_nonce,
       gasPrice: Parames_row.Tx_gasPrice, // TODO:
@@ -3013,25 +3424,29 @@ var Actions_Contrant_Drop = {
       value: Parames_row.Tx_value, // TODO:
       data: Parames_row.Tx_data
     }
-    //06.获取处理后的数据
+    //06. 获取处理后的数据
     let SignData = Actions_CommonTool.Tool_SignData({
       rawTx: rawTx,
-      key: Json_list.PRIVATEKEY.Drop_privateKey
+      key: Json_list.PRIVATEKEY.Token_privateKey
     });
     //07.  发送
     result = await web3.eth.sendRawTransaction(SignData);
+    console.log("返回的hash是：=>", result);
+    //08. 返回
     return result;
   },
-  /*方法说明
+
+  /**方法说明
    *@method D_seterctypeName
    *@for Actions_Contrant_Drop 所属
    *@param{{1:_values(uint256),2:addres_owner(address))}}参数名 参数说明
    *@return {1:hash} 返回值说明
    */
   D_seterctypeName: async (data) => {
-    //参数
-    console.log("调用合约方法-D_seterctypeName...");
+
+    //01. 参数
     let result; //结果集
+    //02. 参数格式
     let Parames_data = {
       Type: {
 
@@ -3046,31 +3461,33 @@ var Actions_Contrant_Drop = {
         tokentype: data.tokentype,
         tokenName: data.tokenName
       }
-    }
-    // let data;
-    // TODO:
+    };
+
+    //03. 合约地址信息
     let Parames_address = {
       //合约地址
-      contractAddress: "0xaA3A01dBa149B109d5e9090f1ad1f2cEbA1C272a",
+      contractAddress: Json_list.PARANES_ADDRESS.contractAddress,
       //发送者
-      fromAddress: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105",
+      fromAddress: Json_list.PARANES_ADDRESS.fromAddress,
       //调用者
-      toAddress: "0xd2580AB2EB3313B0972e9e47b05eE4c15320A6D1"
-    }
-    //  04. 打包数据
+      toAddress: Json_list.PARANES_ADDRESS.toAddress
+    };
+
+    //04. 打包数据
     let Parames_row = {
-      Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
-      Tx_gasPrice: web3.toHex(web3.eth.gasPrice),
-      Tx_gasLimit: web3.toHex(90000),
-      Tx_from: Parames_address.fromAddress,
+      Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)), //TODO 配置 这里是发送者
+      Tx_gasPrice: web3.toHex(web3.eth.gasPrice), // TODO:配置 gas
+      Tx_gasLimit: web3.toHex(8000000), // TODO:配置 Gaslimit
+      Tx_from: Parames_address.fromAddress, //
       Tx_to: Parames_address.contractAddress,
       Tx_value: "0x0",
-      // TODO:
-      Tx_data: Contract_Drop.multiSendandself.getData(Parames_data.Value.tokentype, Parames_data.Value.tokenName, {
+      // TODO:封装 函数 +参数
+      Tx_data: Contract_Drop.seterctypeName.getData(Parames_data.Value.tokentype, Parames_data.Value.tokenName, {
         from: Parames_address.fromAddress
       })
-    }
-    //  05  对接数据
+    };
+
+    //05. 对接数据
     let rawTx = {
       nonce: Parames_row.Tx_nonce,
       gasPrice: Parames_row.Tx_gasPrice, // TODO:
@@ -3079,27 +3496,33 @@ var Actions_Contrant_Drop = {
       to: Parames_row.Tx_to,
       value: Parames_row.Tx_value, // TODO:
       data: Parames_row.Tx_data
-    }
-    //06.获取处理后的数据
+    };
+
+    //06. 获取处理后的数据
     let SignData = Actions_CommonTool.Tool_SignData({
       rawTx: rawTx,
-      key: Json_list.PRIVATEKEY.Drop_privateKey
+      key: Json_list.PRIVATEKEY.Token_privateKey
     });
+
     //07.  发送
     result = await web3.eth.sendRawTransaction(SignData);
-    //
+    console.log("返回的hash是：=>", result);
+    //08. 返回
     return result;
   },
-  /*方法说明
+
+  /**方法说明
    *@method D_sethistoricalOwner
    *@for Actions_Contrant_Drop 所属
-   *@param{{1:_values(uint256),2:addres_owner(address))}}参数名 参数说明
+   *@param{address  _hisaddress,string memory _histext}参数名 参数说明
    *@return {1:hash} 返回值说明
    */
   D_sethistoricalOwner: async (data) => {
+    //01. 参数
     //参数
     console.log("调用合约方法-Token-D_sethistoricalOwner......");
     let result; //结果集
+    //02. 参数格式
     let Parames_data = {
       Type: {
         param1: "address _hisaddress",
@@ -3110,30 +3533,32 @@ var Actions_Contrant_Drop = {
         histext: data.histext
       }
     }
-    // let data;
-    // TODO:
+
+    //03. 合约地址信息
     let Parames_address = {
       //合约地址
-      contractAddress: "0xaA3A01dBa149B109d5e9090f1ad1f2cEbA1C272a",
+      contractAddress: Json_list.PARANES_ADDRESS.contractAddress,
       //发送者
-      fromAddress: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105",
+      fromAddress: Json_list.PARANES_ADDRESS.fromAddress,
       //调用者
-      toAddress: "0xd2580AB2EB3313B0972e9e47b05eE4c15320A6D1"
-    }
-    //  04. 打包数据
+      toAddress: Json_list.PARANES_ADDRESS.toAddress
+    };
+
+    //04. 打包数据
     let Parames_row = {
-      Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
-      Tx_gasPrice: web3.toHex(web3.eth.gasPrice),
-      Tx_gasLimit: web3.toHex(90000),
-      Tx_from: Parames_address.fromAddress,
+      Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)), //TODO 配置 这里是发送者
+      Tx_gasPrice: web3.toHex(web3.eth.gasPrice), // TODO:配置 gas
+      Tx_gasLimit: web3.toHex(8000000), // TODO:配置 Gaslimit
+      Tx_from: Parames_address.fromAddress, //
       Tx_to: Parames_address.contractAddress,
       Tx_value: "0x0",
-      // TODO:
-      Tx_data: Contract_Drop.transfer.getData(Parames_data.Value.hisaddress, Parames_data.Value.histext, {
+      // TODO:封装 函数 +参数
+      Tx_data: Contract_Drop.sethistoricalOwner.getData(Parames_data.Value.hisaddress, Parames_data.Value.histext, {
         from: Parames_address.fromAddress
       })
-    }
-    //  05  对接数据
+    };
+
+    //05. 对接数据
     let rawTx = {
       nonce: Parames_row.Tx_nonce,
       gasPrice: Parames_row.Tx_gasPrice, // TODO:
@@ -3142,27 +3567,32 @@ var Actions_Contrant_Drop = {
       to: Parames_row.Tx_to,
       value: Parames_row.Tx_value, // TODO:
       data: Parames_row.Tx_data
-    }
-    //06.获取处理后的数据
+    };
+
+    //06. 获取处理后的数据
     let SignData = Actions_CommonTool.Tool_SignData({
       rawTx: rawTx,
-      key: Json_list.PRIVATEKEY.Drop_privateKey
+      key: Json_list.PRIVATEKEY.Token_privateKey
     });
+
     //07.  发送
     result = await web3.eth.sendRawTransaction(SignData);
-    //
+    console.log("返回的hash是=>", result);
+    //08. 返回
     return result;
   },
-  /*方法说明
+
+  /**方法说明
    *@method D_transfer
    *@for Actions_Contrant_Drop 所属
    *@param{{1:_values(uint256),2:addres_owner(address))}}参数名 参数说明
    *@return {1:hash} 返回值说明
    */
   D_transfer: async (data) => {
-    //参数
+    //01. 参数
     console.log("调用合约方法-Token-D_transfer......");
     let result; //结果集
+    //02. 参数格式
     let Parames_data = {
       Type: {
         param1: "address to",
@@ -3173,30 +3603,32 @@ var Actions_Contrant_Drop = {
         value: data.value
       }
     }
-    // let data;
-    // TODO:
+
+    //03. 合约地址信息
     let Parames_address = {
       //合约地址
-      contractAddress: "0xaA3A01dBa149B109d5e9090f1ad1f2cEbA1C272a",
+      contractAddress: Json_list.PARANES_ADDRESS.contractAddress,
       //发送者
-      fromAddress: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105",
+      fromAddress: Json_list.PARANES_ADDRESS.fromAddress,
       //调用者
-      toAddress: "0xd2580AB2EB3313B0972e9e47b05eE4c15320A6D1"
-    }
-    //  04. 打包数据
+      toAddress: Json_list.PARANES_ADDRESS.toAddress
+    };
+
+    //04. 打包数据
     let Parames_row = {
-      Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
-      Tx_gasPrice: web3.toHex(web3.eth.gasPrice),
-      Tx_gasLimit: web3.toHex(90000),
-      Tx_from: Parames_address.fromAddress,
+      Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)), //TODO 配置 这里是发送者
+      Tx_gasPrice: web3.toHex(web3.eth.gasPrice), // TODO:配置 gas
+      Tx_gasLimit: web3.toHex(8000000), // TODO:配置 Gaslimit
+      Tx_from: Parames_address.fromAddress, //
       Tx_to: Parames_address.contractAddress,
       Tx_value: "0x0",
-      // TODO:
+      // TODO:封装 函数 +参数
       Tx_data: Contract_Drop.transfer.getData(Parames_data.Value.to, Parames_data.Value.value, {
         from: Parames_address.fromAddress
       })
-    }
-    //  05  对接数据
+    };
+
+    //05. 对接数据
     let rawTx = {
       nonce: Parames_row.Tx_nonce,
       gasPrice: Parames_row.Tx_gasPrice, // TODO:
@@ -3205,28 +3637,34 @@ var Actions_Contrant_Drop = {
       to: Parames_row.Tx_to,
       value: Parames_row.Tx_value, // TODO:
       data: Parames_row.Tx_data
-    }
-    //06.获取处理后的数据
+    };
+
+    //06. 获取处理后的数据
     let SignData = Actions_CommonTool.Tool_SignData({
       rawTx: rawTx,
-      key: Json_list.PRIVATEKEY.TokenMgr_privateKey
+      key: Json_list.PRIVATEKEY.Token_privateKey
     });
+
     //07.  发送
     result = await web3.eth.sendRawTransaction(SignData);
-    //
+    console.log("返回的hash是=>", result);
+
+    //08. 返回
     return result;
   },
-  /*方法说明
+
+  /**方法说明
    *@method D_approve
    *@for Actions_Contrant_Drop 所属
    *@param{{1:_values(uint256),2:addres_owner(address))}}参数名 参数说明
    *@return {1:hash} 返回值说明
    */
   D_approve: async (data) => {
-    //参数
-    //参数
+
+    //01. 参数
     console.log("调用合约方法-Token-D_approve......");
     let result; //结果集
+    //02. 参数格式
     let Parames_data = {
       Type: {
         param1: "address spender",
@@ -3237,30 +3675,32 @@ var Actions_Contrant_Drop = {
         value: data.value
       }
     }
-    // let data;
-    // TODO:
+
+    //03. 合约地址信息
     let Parames_address = {
       //合约地址
-      contractAddress: "0xaA3A01dBa149B109d5e9090f1ad1f2cEbA1C272a",
+      contractAddress: Json_list.PARANES_ADDRESS.contractAddress,
       //发送者
-      fromAddress: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105",
+      fromAddress: Json_list.PARANES_ADDRESS.fromAddress,
       //调用者
-      toAddress: "0xd2580AB2EB3313B0972e9e47b05eE4c15320A6D1"
-    }
-    //  04. 打包数据
+      toAddress: Json_list.PARANES_ADDRESS.toAddress
+    };
+
+    //04. 打包数据
     let Parames_row = {
-      Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
-      Tx_gasPrice: web3.toHex(web3.eth.gasPrice),
-      Tx_gasLimit: web3.toHex(90000),
-      Tx_from: Parames_address.fromAddress,
+      Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)), //TODO 配置 这里是发送者
+      Tx_gasPrice: web3.toHex(web3.eth.gasPrice), // TODO:配置 gas
+      Tx_gasLimit: web3.toHex(8000000), // TODO:配置 Gaslimit
+      Tx_from: Parames_address.fromAddress, //
       Tx_to: Parames_address.contractAddress,
       Tx_value: "0x0",
-      // TODO:
+      // TODO:封装 函数 +参数
       Tx_data: Contract_Drop.approve.getData(Parames_data.Value.spender, Parames_data.Value.value, {
         from: Parames_address.fromAddress
       })
-    }
-    //  05  对接数据
+    };
+
+    //05. 对接数据
     let rawTx = {
       nonce: Parames_row.Tx_nonce,
       gasPrice: Parames_row.Tx_gasPrice, // TODO:
@@ -3269,27 +3709,34 @@ var Actions_Contrant_Drop = {
       to: Parames_row.Tx_to,
       value: Parames_row.Tx_value, // TODO:
       data: Parames_row.Tx_data
-    }
-    //06.获取处理后的数据
+    };
+
+    //06. 获取处理后的数据 签字
     let SignData = Actions_CommonTool.Tool_SignData({
       rawTx: rawTx,
-      key: Json_list.PRIVATEKEY.TokenMgr_privateKey
+      key: Json_list.PRIVATEKEY.Token_privateKey
     });
+
     //07.  发送
     result = await web3.eth.sendRawTransaction(SignData);
-    //
+    console.log("返回的hash是=>", result);
+
+    //08. 返回
     return result;
+
   },
-  /*方法说明
+
+  /**方法说明
    *@method D_transferFrom
    *@for Actions_Contrant_Drop 所属
    *@param{{1:_values(uint256),2:addres_owner(address))}}参数名 参数说明
    *@return {1:hash} 返回值说明
    */
   D_transferFrom: async (data) => {
-    //参数
+    //01. 参数
     console.log("调用合约方法-Token-D_transferFrom...");
     let result; //结果集
+    //02. 参数格式
     let Parames_data = {
       Type: {
         param1: "address from",
@@ -3302,30 +3749,32 @@ var Actions_Contrant_Drop = {
         value: data.value
       }
     }
-    // let data;
-    // TODO:
+
+    //03. 合约地址信息
     let Parames_address = {
       //合约地址
-      contractAddress: "0xaA3A01dBa149B109d5e9090f1ad1f2cEbA1C272a",
+      contractAddress: Json_list.PARANES_ADDRESS.contractAddress,
       //发送者
-      fromAddress: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105",
+      fromAddress: Json_list.PARANES_ADDRESS.fromAddress,
       //调用者
-      toAddress: "0xd2580AB2EB3313B0972e9e47b05eE4c15320A6D1"
-    }
-    //  04. 打包数据
+      toAddress: Json_list.PARANES_ADDRESS.toAddress
+    };
+
+    //04. 打包数据
     let Parames_row = {
-      Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
-      Tx_gasPrice: web3.toHex(web3.eth.gasPrice),
-      Tx_gasLimit: web3.toHex(90000),
-      Tx_from: Parames_address.fromAddress,
+      Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)), //TODO 配置 这里是发送者
+      Tx_gasPrice: web3.toHex(web3.eth.gasPrice), // TODO:配置 gas
+      Tx_gasLimit: web3.toHex(8000000), // TODO:配置 Gaslimit
+      Tx_from: Parames_address.fromAddress, //
       Tx_to: Parames_address.contractAddress,
       Tx_value: "0x0",
-      // TODO:
+      // TODO:封装 函数 +参数
       Tx_data: Contract_Drop.transferFrom.getData(Parames_data.Value.from, Parames_data.Value.to, Parames_data.Value.value, {
         from: Parames_address.fromAddress
       })
-    }
-    //  05  对接数据
+    };
+
+    //05. 对接数据
     let rawTx = {
       nonce: Parames_row.Tx_nonce,
       gasPrice: Parames_row.Tx_gasPrice, // TODO:
@@ -3334,17 +3783,28 @@ var Actions_Contrant_Drop = {
       to: Parames_row.Tx_to,
       value: Parames_row.Tx_value, // TODO:
       data: Parames_row.Tx_data
-    }
-    //06.获取处理后的数据
+    };
+
+    //06. 获取处理后的数据 签字
     let SignData = Actions_CommonTool.Tool_SignData({
       rawTx: rawTx,
-      key: Json_list.PRIVATEKEY.TokenMgr_privateKey
+      key: Json_list.PRIVATEKEY.Token_privateKey
     });
+
     //07.  发送
     result = await web3.eth.sendRawTransaction(SignData);
-    //返回
+    console.log("返回的hash是=>", result);
+
+    //08. 返回
     return result;
   },
+
+  /**方法说明
+   *@method D_totalSupply
+   *@for Actions_Contrant_Drop 所属
+   *@param{{1:_values(uint256),2:addres_owner(address))}}参数名 参数说明
+   *@return {1:hash} 返回值说明
+   */
   D_totalSupply: async (data) => {
     //参数
     console.log("调用合约方法-Token-D_totalSupply...");
@@ -3401,24 +3861,25 @@ var Actions_Contrant_Drop = {
     //
     return result;
   },
+
   //闪电空投
   D_boltDrop: async (data) => {
     // TODO:
-    let  result;
+    let result;
     let cData = data;
     console.log("调用合约方法-Token-D_boltDrop...", cData);
     let parsm = cData.data;
-    console.log("D_multiSend的数据：address",parsm.address);
-    console.log("D_multiSend的数据：value",parsm.value);
+    console.log("D_multiSend的数据：address", parsm.address);
+    console.log("D_multiSend的数据：value", parsm.value);
     // TODO: 切割数据
 
     //参数
-    let resultData ={
-      Sum:0,
-      Normal:0,
-      Unnormal:0,
-      Data:[],
-      unData:[]
+    let resultData = {
+      Sum: 0,
+      Normal: 0,
+      Unnormal: 0,
+      Data: [],
+      unData: []
     }; //结果集
     let Parames_data = {
       Type: {
@@ -3445,82 +3906,18 @@ var Actions_Contrant_Drop = {
 
     let Parames_row = {
       Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
-      Tx_gasPrice: web3.toHex((web3.eth.gasPrice)*1.2),
+      Tx_gasPrice: web3.toHex((web3.eth.gasPrice) * 1.2),
       Tx_gasLimit: web3.toHex(8000000),
       Tx_from: Parames_address.fromAddress,
       Tx_to: Parames_address.contractAddress,
       Tx_value: "0x0",
-          //// TODO:
-      Tx_data: Contract_Drop.multiSend.getData(parsm.address,parsm.value, {
-      from: Parames_address.fromAddress
-        })
-    }
-
-        //  05. 对接数据
-        let rawTx = {
-          nonce: Parames_row.Tx_nonce,
-          gasPrice: Parames_row.Tx_gasPrice, // TODO:
-          gasLimit: Parames_row.Tx_gasLimit,
-          from: Parames_row.Tx_from,
-          to: Parames_row.Tx_to,
-          value: Parames_row.Tx_value, // TODO:
-          data: Parames_row.Tx_data
-        }
-            // 06.签名编译
-            let SignData = Actions_CommonTool.Tool_SignData({//3483
-              rawTx: rawTx,
-              key: Json_list.PRIVATEKEY.Drop_privateKey
-            });
-            result = await web3.eth.sendRawTransaction(SignData);
-             // web3.eth.sendRawTransaction(SignData,(err,hash)=>{
-             //     if (!err){
-             //       console.log("hash-----------",hash);
-             //     }else{
-             //       console.log("err",err);
-             //     }
-             // });
-
-            console.log("----发送交易返回数据是：",result);
-            return result;
-
-  },
-  D_balanceOf: async (data) => {
-    //参数
-    console.log("调用合约方法-Actions_Contrant_Drop-D_balanceOf...");
-    let result; //结果集
-
-    let Parames_data = {
-      Type: {
-        param1: "address who"
-      },
-      Value: {
-        who: data.who
-      }
-    }
-    // let data;
-    // TODO:
-    let Parames_address = {
-      //合约地址
-      contractAddress: "0xaA3A01dBa149B109d5e9090f1ad1f2cEbA1C272a",
-      //发送者
-      fromAddress: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105",
-      //调用者
-      toAddress: "0xd2580AB2EB3313B0972e9e47b05eE4c15320A6D1"
-    }
-    //  04. 打包数据
-    let Parames_row = {
-      Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
-      Tx_gasPrice: web3.toHex(web3.eth.gasPrice),
-      Tx_gasLimit: web3.toHex(90000),
-      Tx_from: Parames_address.fromAddress,
-      Tx_to: Parames_address.contractAddress,
-      Tx_value: "0x0",
-      // TODO:
-      Tx_data: Contract_Drop.balanceOf.getData(Parames_data.Value.who, {
+      //// TODO:
+      Tx_data: Contract_Drop.multiSend.getData(parsm.address, parsm.value, {
         from: Parames_address.fromAddress
       })
     }
-    //  05  对接数据
+
+    //  05. 对接数据
     let rawTx = {
       nonce: Parames_row.Tx_nonce,
       gasPrice: Parames_row.Tx_gasPrice, // TODO:
@@ -3530,20 +3927,97 @@ var Actions_Contrant_Drop = {
       value: Parames_row.Tx_value, // TODO:
       data: Parames_row.Tx_data
     }
-    //06.获取处理后的数据
+    // 06.签名编译
+    let SignData = Actions_CommonTool.Tool_SignData({ //3483
+      rawTx: rawTx,
+      key: Json_list.PRIVATEKEY.Drop_privateKey
+    });
+    result = await web3.eth.sendRawTransaction(SignData);
+    // web3.eth.sendRawTransaction(SignData,(err,hash)=>{
+    //     if (!err){
+    //       console.log("hash-----------",hash);
+    //     }else{
+    //       console.log("err",err);
+    //     }
+    // });
+
+    console.log("----发送交易返回数据是：", result);
+    return result;
+
+  },
+
+  //测试查看余额
+  D_balanceOf: async (data) => {
+    //01. 参数
+    console.log("调用合约方法-D_balanceOf...");
+    let result; //结果集
+    //02. 参数格式
+    let Parames_data = {
+      Type: {
+        param1: "address who"
+      },
+      Value: {
+        who: data.who
+      }
+    }
+    //01. 参数
+    console.log("调用合约方法-Token-D_transferFrom...");
+
+    //03. 合约地址信息
+    let Parames_address = {
+      //合约地址
+      contractAddress: Json_list.PARANES_ADDRESS.contractAddress,
+      //发送者
+      fromAddress: Json_list.PARANES_ADDRESS.fromAddress,
+      //调用者
+      toAddress: Json_list.PARANES_ADDRESS.toAddress
+    };
+
+    //04. 打包数据
+    let Parames_row = {
+      Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)), //TODO 配置 这里是发送者
+      Tx_gasPrice: web3.toHex(web3.eth.gasPrice), // TODO:配置 gas
+      Tx_gasLimit: web3.toHex(8000000), // TODO:配置 Gaslimit
+      Tx_from: Parames_address.fromAddress, //
+      Tx_to: Parames_address.contractAddress,
+      Tx_value: "0x0",
+      // TODO:封装 函数 +参数
+      Tx_data: Contract_Drop.balanceOf.getData(Parames_data.Value.who, {
+        from: Parames_address.fromAddress
+      })
+    };
+
+    //05. 对接数据
+    let rawTx = {
+      nonce: Parames_row.Tx_nonce,
+      gasPrice: Parames_row.Tx_gasPrice, // TODO:
+      gasLimit: Parames_row.Tx_gasLimit,
+      from: Parames_row.Tx_from,
+      to: Parames_row.Tx_to,
+      value: Parames_row.Tx_value, // TODO:
+      data: Parames_row.Tx_data
+    };
+
+    //06. 获取处理后的数据 签字
     let SignData = Actions_CommonTool.Tool_SignData({
       rawTx: rawTx,
-      key: Json_list.PRIVATEKEY.TokenMgr_privateKey
+      key: Json_list.PRIVATEKEY.Token_privateKey
     });
+
     //07.  发送
     result = await web3.eth.sendRawTransaction(SignData);
-    //
+    console.log("返回的hash是=>", result);
+
+    //08. 返回
     return result;
   }
+
 }
+
 //10.Actions_Contrant_TokenMgr=>项目之前空投合约的相关方法的实现(TokenMgr)
 var Actions_Contrant_TokenMgr = {
-  /*方法说明
+
+  /**方法说明
    *@method M_prePare :将令牌发送到一个函数中的其他多个地址
    *@for Actions_Contrant_TokenMgr 所属
    *@param_rand随机索引，用于选择FlyDropToken契约地址
@@ -3621,7 +4095,7 @@ var Actions_Contrant_TokenMgr = {
     return result;
   },
 
-  /*方法说明
+  /**方法说明
    *@method M_flyDrop :将令牌发送到一个函数中的其他多个地址
    *@for Actions_Contrant_TokenMgr 所属
    *@param_destAddrs将要发送令牌的地址发送
@@ -3687,23 +4161,40 @@ var Actions_Contrant_TokenMgr = {
     return result;
   }
 }
-//11.Actions_Configure=>项目相关配置信息()
+
+//@11.Actions_Configure=>项目相关配置信息()
 var Actions_Configure = {
+
+  /**方法说明
+   *@method Abi_Token abi
+   */
   Abi_Token: {
 
   },
+
+  /**方法说明
+   *@method Abi_drop abi
+   */
   Abi_drop: {
 
   },
+
+  /**方法说明
+   *@method Abi_TokenMgr abi
+   */
   Abi_TokenMgr: {
 
   }
 
 }
+
 //13.Actions_Commontool =>公共方法
 var Actions_CommonTool = {
 
-  Tool_SignData: (data) => {//3483
+  /**方法说明
+   *@Tool_SignData  对序列化好的数据集进行签名
+   */
+  Tool_SignData: (data) => {
     //  01.封装对象
     let tx = new Tx(data.rawTx);
     //  02.序列化私钥
@@ -3715,6 +4206,10 @@ var Actions_CommonTool = {
     //  05 返回
     return serializeTx;
   },
+
+  /**方法说明
+   *@Tool_bufferPrivateKey 对获取私钥
+   */
   Tool_bufferPrivateKey: (data) => {
     let key;
     switch (data.key) {
@@ -3733,18 +4228,25 @@ var Actions_CommonTool = {
     }
     return key;
   },
+
+  /**方法说明
+   *@Tool_bufferPrivateKey11  序列化私钥
+   */
   Tool_bufferPrivateKey11: () => {
 
 
   },
-  //  Cancel the transaction if the current price of natural gas is too high
-  Tool_gasHign: () => {
 
+  /**方法说明
+   *@Tool_gasHign  gas高度  Cancel the transaction if the current price of natural gas is too high
+   */
+  Tool_gasHign: () => {
 
   }
 
 }
-//12.Json_list=>常量信息的相关管理(abi,合约地址,gas参数,等)
+
+//12.Json_list=>常量信息的相关管理(abi,合约地址,gas参数,等) Json_list.PARANES_ADDRESS.contractAddress
 const Json_list = {
   ABI_TOKEN: [{
       "constant": false,
@@ -4419,6 +4921,49 @@ const Json_list = {
     LM_240: 240,
     LM_000: 0
   },
+  // TODO:合约地址
+  PARANES_ADDRESS :{
+    //合约地址
+    contractAddress: "0xaA3A01dBa149B109d5e9090f1ad1f2cEbA1C272a",
+    //发送者
+    fromAddress: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105",
+    //调用者
+    toAddress: "0xd2580AB2EB3313B0972e9e47b05eE4c15320A6D1"
+
+  },
+
+  //gas price
+  GASPRICE: {
+    GT_30: 1.25,
+    GT_20: 1.2,
+    GT_10: 1.15,
+    GT_3: 1.12,
+    DEFAULT: 1.1
+  },
+
+  //gas limit
+  GASLIMIT: {
+    GLM_10:1.1,
+    GLM_12:1.2,
+    GLM_13:1.3,
+    GLM_14:1.4,
+    GLM_15:1.5,
+    GLM_18:1.8,
+    DEFAULT:1
+  },
+
+ TRANSACTIONTYPE: {
+  WITHDRAW: 'withdraw',
+  CREATE_DEPOSIT: 'createDeposit',
+  DO_DEPOSIT: 'doDeposit',
+  NORMAL: 'normal'
+},
+
+  //parameter format 参数格式
+  PARAMTERFORMAT:{
+
+
+  },
   USE_ADDRESS: {
     User_1: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105",
     User_2: "0xd2580AB2EB3313B0972e9e47b05eE4c15320A6D1",
@@ -4427,15 +4972,18 @@ const Json_list = {
   }
 
 };
+
 //13.追加配置
 const Json_Bz = {};
+
 //二级启动
 var Actions_Starting = {
   //init  web3, 合约对象
   init: () => {
-    //
+    //初始化web3 实例
     Actions_initWeb3Provider.initWeb3();
     // Actions_initWeb3Provider.initContract_Token();
+    //初始化合约实例
     Actions_initWeb3Provider.initContract_Drop();
   },
   //test 启动
@@ -4446,9 +4994,10 @@ var Actions_Starting = {
     console.log("-");
   }
 }
+
 //一级启动
 var Actions = {
-  //Action 启动其它函数
+  //Action 启动二级action
   init: (data) => {
     Actions_Koa.render();
     Actions_Koa.user();
