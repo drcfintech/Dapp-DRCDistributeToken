@@ -122,7 +122,7 @@ var Actions_Router = {
         name: '张三',
         num: 20
       }
-      await ctx.render('exct', {
+      await ctx.render('execl', {
         list: list
       });
     });
