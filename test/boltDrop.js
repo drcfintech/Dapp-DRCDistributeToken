@@ -23,7 +23,7 @@ var Action_Methods = {
   //读取文件
   ReadFile:()=>{
     // let Filesdata = fs.readFileSync('testdemo1.xlsx');
-    let Filesdata = fs.readFileSync('Tokenbig.xlsx');
+    let Filesdata = fs.readFileSync('test05.xlsx');
     logger.info("读取文件成功");
     //返回
     return Filesdata;

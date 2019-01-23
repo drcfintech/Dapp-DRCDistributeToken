@@ -18,3 +18,7 @@ node 部分
       安装    npm install --save koa-bodyparser
       安装    npm install --save art-template
       安装    npm install --save koa-art-template
+      安装        cors
+      安装    npm install koa-convert
+      安装    npm i sleep
+      安装    npm  install  log4js

@@ -1,7 +1,8 @@
+//导入包
 const Web3 = require("web3");
+const Koa = require('koa');
 const solc = require('solc');
 const fs = require("fs");
-const Koa = require('koa');
 const router = require('koa-router')();
 const bodyParser = require('koa-bodyparser');
 const render = require('koa-art-template');
@@ -9,17 +10,19 @@ const path = require('path');
 const views = require('koa-views');
 const cors = require('@koa/cors');
 const convert = require('koa-convert');
-const HDWalletProvider = require('truffle-hdwallet-provider');
-//
-const walletConfig = require('./walletConfig.json');
+// const HDWalletProvider = require('truffle-hdwallet-provider');
 const Tx = require('ethereumjs-tx');
-const esponceData = require("./responceData.js");
-//ABI
+const sleep = require("sleep-promise");
+const log4js = require('log4js');
+//json
+const walletConfig = require('./walletConfig.json');
+// const esponceData = require("./responceData.js");
+//json-ABI
 const UR_Contract_addresss = require('../contractAbi/Contract_addresss.json');
 const UR_DrcAirDrop = require('../contractAbi/DrcAirDrop.json');
 const UR_DrcToken = require('../contractAbi/DrcToken.json');
 //init
-//handle request entity too large
+//han dle request entity too large
 
 const app = new Koa();
 var web3 = new Web3();
@@ -73,6 +76,18 @@ var Actions_Koa = {
     // app.use(async ctx => {
     //   ctx.body = ctx.request.body;
     // });
+
+    const logger = log4js.getLogger();
+    logger.level = 'info';
+    log4js.configure({
+      appenders: {
+        out: { type: 'stdout' },//设置是否在控制台打印日志
+        info: { type: 'file', filename: '../logs/info.log' }
+      },
+      categories: {
+        default: { appenders: [ 'out', 'info' ], level: 'info' }//去掉'out'。控制台不打印日志
+      }
+    });
     app.use(convert(bodyParser({
         enableTypes:['json', 'form', 'text'],
         formLimit:"10mb",
@@ -87,17 +102,18 @@ var Actions_Koa = {
     app.listen(3003, () => {
       console.log("start at port 3003");
     });
-  },
-
+  }
 }
 //4.Actions_Router=>router路由的get方法，post方法配置
 var Actions_Router = {
+  //get 路由
   router_get: () => {
-
+    //首页
     router.get('/', (ctx, next) => {
       // TODO:
       ctx.body = "测试路由";
     });
+    //测试页面
     router.get('/test', async (ctx, next) => {
       // TODO:
       ctx.body = "测试路由";
@@ -110,7 +126,17 @@ var Actions_Router = {
         list: list
       });
     });
-    //
+    /**
+    代币测试
+    */
+
+    /**
+   * @get{方式发起 代币合约的transferFrom交易}
+   * @method {transferFrom}
+   * @for {NodeList}
+   * @param {address from,address to, uint256 value}
+   * @return {hash}
+   */
     router.get('/Token/T_transferFrom', (ctx, next) => {
       // TODO:校验数据
       let sFrom = Json_list.ADDRESS_TOKEN;
@@ -129,6 +155,13 @@ var Actions_Router = {
       });
     });
 
+    /**
+   * @get{方式发起 代币合约的transfer交易}
+   * @method {transfer}
+   * @for {routerList}
+   * @param {address to,uint256 value}
+   * @return {hash}
+   */
     router.get('/Token/T_transfer', (ctx, next) => {
       // TODO:
       //  01. TODO:校验数据
@@ -167,6 +200,13 @@ var Actions_Router = {
       });
     });
 
+    /**
+   * @get{方式发起 代币合约的balanceOf交易}
+   * @method {balanceOf}
+   * @for {routerList}
+   * @param {address owner}
+   * @return {hash}
+   */
     router.get('/Token/T_balanceOf', (ctx, next) => {
       // TODO:
       //  01. TODO:校验数据
@@ -204,6 +244,13 @@ var Actions_Router = {
       });
     });
 
+    /**
+   * @get{方式发起 代币合约的approv交易}
+   * @method {approve}
+   * @for {routerList}
+   * @param {address spender,uint256 value}
+   * @return {hash}
+   */
     router.get('/Token/T_approve', (ctx, next) => {
       // TODO:
       ctx.body = "T_approve"; //  01. TODO:校验数据
@@ -242,6 +289,13 @@ var Actions_Router = {
       });
     });
 
+    /**
+   * @get{方式发起 代币合约的allowanc交易}
+   * @method {allowanc}
+   * @for {routerList}
+   * @param {address owner,uint256 value}
+   * @return {hash}
+   */
     router.get('/Token/T_allowance', (ctx, next) => {
       // TODO:
       ctx.body = "T_allowance";
@@ -282,6 +336,15 @@ var Actions_Router = {
       });
     });
 
+    //空投合约路由
+
+    /**
+   * @get{方式发起 空投合约的setToken交易}
+   * @method {setToken}
+   * @for {routerList}
+   * @param {address _token}
+   * @return {hash}
+   */
     router.get('/Drop/D_setToken', (ctx, next) => {
       // TODO:
       ctx.body = "D_setToken";
@@ -321,6 +384,13 @@ var Actions_Router = {
       });
     });
 
+    /**
+   * @get{方式发起 空投合约的multiSendandself交易}
+   * @method {multiSendandself}
+   * @for {routerList}
+   * @param {address[] memory  _destAddrs,uint256[]  memory _values,uint256  _valuesmyself}
+   * @return {hash}
+   */
     router.get('/Drop/D_multiSendandself', (ctx, next) => {
       // TODO:
       ctx.body = "D_multiSendandself";
@@ -368,6 +438,13 @@ var Actions_Router = {
       });
     });
 
+    /**
+   * @get{方式发起 空投合约的multiSend交易}
+   * @method {multiSend}
+   * @for {routerList}
+   * @param {address[]  memory _destAddrs, uint256[] memory _values}
+   * @return {hash}
+   */
     router.get('/Drop/D_multiSend', (ctx, next) => {
       // TODO:
       ctx.body = "D_multiSend";
@@ -406,44 +483,13 @@ var Actions_Router = {
       deploy(Pms_package.data).then(res => {});
     });
 
-    router.get('/Drop/D_multiSend2', (ctx, next) => {
-      // TODO:
-      ctx.body = "D_multiSend2";
-      // TODO:
-      //  01. TODO:校验数据
-      //  02. 解析数据打包
-      let Pms_package = {
-        data: {
-          address: ctx.request.query.address,
-          uint256: ctx.request.query.uint256
-        },
-        ctx: {
-          url: ctx.url,
-          request: ctx.request,
-          req_querystring: ctx.req_querystring,
-          req_querystring: ctx.req_querystring
-        },
-        address: {
-          from: "",
-          to: "",
-          value: ''
-        },
-        bz: {}
-      }
-      //  03. 查询方法
-      deploy = async (data, next) => {
-        let result = await Actions_Contrant_Token.D_multiSend2({
-          state: data,
-          data: data,
-          system: data
-        });
-        console.log("=>", result);
-        return result;
-      }
-      //  04. 结果返回
-      deploy(Pms_package.data).then(res => {});
-    });
-
+    /**
+   * @get{方式发起 空投合约的multiself交易}
+   * @method {multiSend}
+   * @for {routerList}
+   * @param {uint256  _values,address  addres_owner}
+   * @return {hash}
+   */
     router.get('/Drop/D_multiself', (ctx, next) => {
       // TODO:
       ctx.body = "D_multiself";
@@ -482,6 +528,13 @@ var Actions_Router = {
       deploy(Pms_package.data).then(res => {});
     });
 
+    /**
+   * @get{方式发起 空投合约的settrustOwner-存入白名单}
+   * @method {settrustOwner}
+   * @for {routerList}
+   * @param {address  _ownaddress,string memory _owntext}
+   * @return {hash}
+   */
     router.get('/Drop/D_settrustOwner', (ctx, next) => {
       // TODO:
       ctx.body = "D_settrustOwner";
@@ -520,6 +573,13 @@ var Actions_Router = {
       deploy(Pms_package.data).then(res => {});
     });
 
+    /**
+   * @get{方式发起 空投合约的seterctypeName-存入合约记录}
+   * @method {settrustOwner}
+   * @for {routerList}
+   * @param {address  _ownaddress,string memory _owntext}
+   * @return {hash}
+   */
     router.get('/Drop/D_seterctypeName', (ctx, next) => {
       // TODO:
       ctx.body = "D_seterctypeName";
@@ -558,6 +618,13 @@ var Actions_Router = {
       deploy(Pms_package.data).then(res => {});
     });
 
+    /**
+   * @get{方式发起 空投合约的sethistoricalOwner-存入历史纪录}
+   * @method {sethistoricalOwner}
+   * @for {routerList}
+   * @param {address  _hisaddress,string memory _histext}
+   * @return {hash}
+   */
     router.get('/Drop/D_sethistoricalOwner', (ctx, next) => {
       // TODO:
       ctx.body = "D_sethistoricalOwner";
@@ -596,6 +663,13 @@ var Actions_Router = {
       deploy(Pms_package.data).then(res => {});
     });
 
+    /**
+   * @get{方式发起 空投合约的transfer-存入历史纪录}
+   * @method {transfer}
+   * @for {routerList}
+   * @param {address to, uint256 value}
+   * @return {hash}
+   */
     router.get('/Drop/D_transfer', (ctx, next) => {
       // TODO:
       ctx.body = "D_transfer";
@@ -634,6 +708,13 @@ var Actions_Router = {
       deploy(Pms_package.data).then(res => {});
     });
 
+    /**
+   * @get{方式发起 空投合约的approve }
+   * @method {approve}
+   * @for {routerList}
+   * @param {address spender, uint256 value}
+   * @return {hash}
+   */
     router.get('/Drop/D_approve', (ctx, next) => {
       // TODO:
       ctx.body = "D_approve";
@@ -672,6 +753,13 @@ var Actions_Router = {
       deploy(Pms_package.data).then(res => {});
     });
 
+    /**
+   * @get{方式发起 空投合约的transferFrom}
+   * @method {transferFrom}
+   * @for {routerList}
+   * @param {address from, address to, uint256 value}
+   * @return {hash}
+   */
     router.get('/Drop/D_transferFrom', (ctx, next) => {
       // TODO:
       ctx.body = "D_transferFrom";
@@ -710,6 +798,13 @@ var Actions_Router = {
       deploy(Pms_package.data).then(res => {});
     });
 
+    /**
+   * @get{方式发起 空投合约的balanceOf}
+   * @method {balanceOf}
+   * @for {routerList}
+   * @param {address owner}
+   * @return {hash}
+   */
     router.get('/Drop/D_balanceOf', (ctx, next) => {
       // TODO:
       ctx.body = "D_balanceOf";
@@ -747,8 +842,15 @@ var Actions_Router = {
       //  04. 结果返回
       deploy(Pms_package.data).then(res => {});
     });
-    //
+
     //  M_prepare 路由
+    /**
+   * @get{方式发起 空投合约的prepare}
+   * @method {prepare}
+   * @for {routerList}
+   * @param {}
+   * @return {hash}
+   */
     router.get('/Drop/M_prepare', (ctx, next) => {
       //  01. TODO:校验数据
       //  02. 解析数据打包
@@ -798,6 +900,13 @@ var Actions_Router = {
       });
     });
 
+    /**
+   * @get{方式发起 空投合约的flyDrop}
+   * @method {flyDrop}
+   * @for {routerList}
+   * @param {}
+   * @return {hash}
+   */
     router.get('/Drop/M_flyDrop', (ctx, next) => {
       //  01. TODO:校验数据
       console.log("url：http://127.0.0.1:3003/Drop/M_flyDrop");
@@ -845,14 +954,16 @@ var Actions_Router = {
         ctx.body = "调用flyDrop结果是=>" + res;
       });
     });
+
   },
+  //post 路由
   router_post: () => {
     //
     router.post('/', (ctx, next) => {
       // TODO:
       ctx.body = "测试路由111";
     });
-    //单例模型 34531
+    //测试页面
     router.post('/Token/Test', (ctx, next) => {
       // TODO:
       let data = ctx.request.body;
@@ -909,6 +1020,14 @@ var Actions_Router = {
       //   ctx.body = "调用tranfer结果是=>" + res;
       // });
     });
+
+    /**
+   * @post{方式发起 代币合约的transferFrom交易}
+   * @method {transferFrom}
+   * @for {NodeList}
+   * @param {address from,address to, uint256 value}
+   * @return {hash}
+   */
     router.post('/Token/T_transferFrom', (ctx, next) => {
       // TODO:
       ctx.body = "T_transferFrom";
@@ -918,23 +1037,49 @@ var Actions_Router = {
       ctx.body = "T_transferFrom";
     });
 
+    /**
+   * @post{方式发起 代币合约的transfer交易}
+   * @method {transfer}
+   * @for {routerList}
+   * @param {address to,uint256 value}
+   * @return {hash}
+   */
     router.post('/Token/T_transfer', (ctx, next) => {
       // TODO:
       ctx.body = "T_transfer";
     });
 
+    /**
+    * @post{方式发起 代币合约的approv交易}
+    * @method {approve}
+    * @for {routerList}
+    * @param {address spender,uint256 value}
+    * @return {hash}
+    */
     router.post('/Token/T_approve', (ctx, next) => {
       // TODO:
       ctx.body = "T_approve";
     });
 
+    /**
+   * @post{方式发起 代币合约的allowanc交易}
+   * @method {allowanc}
+   * @for {routerList}
+   * @param {address owner,uint256 value}
+   * @return {hash}
+   */
     router.post('/Token/T_allowance', (ctx, next) => {
       // TODO:
       ctx.body = "T_allowance";
     });
 
-    /**  @ 空投合约 -初始化代币
-    */
+    /**
+   * @post{方式发起 空投合约的setToken交易}
+   * @method {setToken}
+   * @for {routerList}
+   * @param {address _token}
+   * @return {hash}
+   */
     router.post('/Drop/D_setToken', (ctx, next) => {
       // TODO:
       ctx.body = "D_setToken";
@@ -982,15 +1127,27 @@ var Actions_Router = {
 
     });
 
+    /**
+   * @post{方式发起 空投合约的multiSendandself交易}
+   * @method {multiSendandself}
+   * @for {routerList}
+   * @param {address[] memory  _destAddrs,uint256[]  memory _values,uint256  _valuesmyself}
+   * @return {hash}
+   */
     router.post('/Drop/D_multiSendandself', (ctx, next) => {
       // TODO:
       ctx.body = "D_multiSendandself";
     });
     /**  @ 空投合约 -批量投放代币*/
 
-    //
-
-    router.post('/Drop/D_multiSend_te', async (ctx, next) => {
+    /**
+   * @post{方式发起 test}
+   * @method {D_multiSend_te}
+   * @for {routerList}
+   * @param {address[] memory  _destAddrs,uint256[]  memory _values,uint256  _valuesmyself}
+   * @return {hash}
+   */
+    router.post('/Drop/D_multiSend_te',(ctx, next) => {
       // TODO:
       ctx.body = "D_multiSend_te";
       // TODO:
@@ -1010,8 +1167,8 @@ var Actions_Router = {
       // TODO:校验数据
       // let sFrom = Json_list. ;
       deploy = async (data, next) => {
-        let result = await Actions_Contrant_Drop.D_multiSend_ed({
-          data
+        let result = await Actions_Contrant_Drop.D_multiSend_Test({
+          data:data
         });
         console.log("1111=>", result);
         return result;
@@ -1023,6 +1180,13 @@ var Actions_Router = {
       return cData;
     });
     //
+    /**
+   * @post{方式发起 空投合约的multiSend交易}
+   * @method {multiSend}
+   * @for {routerList}
+   * @param {address[]  memory _destAddrs, uint256[] memory _values}
+   * @return {hash}
+   */
     router.post('/Drop/D_multiSend', (ctx, next) => {
       // TODO:
       ctx.body = "D_multiSend";
@@ -1049,64 +1213,134 @@ var Actions_Router = {
       });
       return cData;
     });
-
-    router.post('/Drop/D_multiSend2', (ctx, next) => {
-      // TODO:
-      ctx.body = "D_multiSend2";
-    });
-
+    /**
+   * @post{方式发起 空投合约的multiself交易}
+   * @method {multiSend}
+   * @for {routerList}
+   * @param {uint256  _values,address  addres_owner}
+   * @return {hash}
+   */
     router.post('/Drop/D_multiself', (ctx, next) => {
       // TODO:
       ctx.body = "D_multiself";
     });
 
+    /**
+   * @post{方式发起 空投合约的settrustOwner-存入白名单}
+   * @method {settrustOwner}
+   * @for {routerList}
+   * @param {address  _ownaddress,string memory _owntext}
+   * @return {hash}
+   */
     router.post('/Drop/D_settrustOwner', (ctx, next) => {
       // TODO:
       ctx.body = "D_settrustOwner";
     });
 
+    /**
+   * @post{方式发起 空投合约的seterctypeName-存入合约记录}
+   * @method {settrustOwner}
+   * @for {routerList}
+   * @param {address  _ownaddress,string memory _owntext}
+   * @return {hash}
+   */
     router.post('/Drop/D_seterctypeName', (ctx, next) => {
       // TODO:
       ctx.body = "D_seterctypeName";
     });
 
+    /**
+   * @post{方式发起 空投合约的sethistoricalOwner-存入历史纪录}
+   * @method {sethistoricalOwner}
+   * @for {routerList}
+   * @param {address  _hisaddress,string memory _histext}
+   * @return {hash}
+   */
     router.post('/Drop/D_sethistoricalOwner', (ctx, next) => {
       // TODO:
       ctx.body = "D_sethistoricalOwner";
     });
 
+    /**
+   * @post{方式发起 空投合约的transfer-存入历史纪录}
+   * @method {transfer}
+   * @for {routerList}
+   * @param {address to, uint256 value}
+   * @return {hash}
+   */
     router.post('/Drop/D_transfer', (ctx, next) => {
       // TODO:
       ctx.body = "D_transfer";
     });
 
+    /**
+   * @post{方式发起 空投合约的approve }
+   * @method {approve}
+   * @for {routerList}
+   * @param {address spender, uint256 value}
+   * @return {hash}
+   */
     router.post('/Drop/D_approve', (ctx, next) => {
       // TODO:
       ctx.body = "D_approve";
     });
 
+    /**
+   * @post{方式发起 空投合约的transferFrom}
+   * @method {transferFrom}
+   * @for {routerList}
+   * @param {address from, address to, uint256 value}
+   * @return {hash}
+   */
     router.post('/Drop/D_transferFrom', (ctx, next) => {
       // TODO:
       ctx.body = "D_transferFrom";
     });
 
+    /**
+   * @post{方式发起 空投合约的balanceOf}
+   * @method {balanceOf}
+   * @for {routerList}
+   * @param {address owner}
+   * @return {hash}
+   */
     router.post('/Drop/D_balanceOf', (ctx, next) => {
       // TODO:
       ctx.body = "D_balanceOf";
     });
 
-    //
+    /**
+   * @post{方式发起 空投合约的prepare}
+   * @method {prepare}
+   * @for {routerList}
+   * @param {}
+   * @return {hash}
+   */
     router.post('/Drop/M_prePare', (ctx, next) => {
       // TODO:
       ctx.body = "M_prepare";
     });
 
+    /**
+   * @post{方式发起 空投合约的flyDrop}
+   * @method {flyDrop}
+   * @for {routerList}
+   * @param {}
+   * @return {hash}
+   */
     router.post('/Drop/M_flyDrop', (ctx, next) => {
       // TODO:
       ctx.body = "M_flyDrop";
     });
 
-    //闪电空投
+
+    /**
+   * @post{方式发起 空投合约的flyDrop}//闪电空投
+   * @method {flyDrop}
+   * @for {routerList}
+   * @param {}
+   * @return {hash}
+   */
     router.post('/Bolt/flyDrop', (ctx, next) => {
       // TODO:
       ctx.body = "M_flyDrop";
@@ -1132,9 +1366,8 @@ var Actions_Router = {
       });
       return cData;
     });
-
-
   }
+
 }
 //5.Actions_initWeb3Provider=>web3js相关初始化参数(web3,合约实例等)
 var Actions_initWeb3Provider = {
@@ -1142,7 +1375,7 @@ var Actions_initWeb3Provider = {
     //创建一个web3实例，设置一个provider,成功引入后，就可以用web3的api
     if (typeof web3 == 'undefined') {
       web3 = new Web3(web3.currentProvider); //新建web3对象
-      console.log("web  undefined");
+      console.log("web3js is undefined");
     } else {
       // TODO:
       web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/ee23e77aa14846d88eb5cad3d59e37f2"));
@@ -1150,13 +1383,14 @@ var Actions_initWeb3Provider = {
 
     } //设置一个provider
     // TODO: web3.utils.isAddress(address)
-    console.log("web3实例化完成=>");
+    console.log("web3=>实例化完成.....");
     console.log("web3.currentProvider=>", web3.currentProvider);
     console.log("web3是否连接成功=>", web3.isConnected());
-    console.log("默认账户", web3.eth.defaultAccount);
-    console.log("默认区块", web3.eth.defaultBlock);
+    console.log("默认账户=>", web3.eth.defaultAccount);
+    console.log("默认区块=>", web3.eth.defaultBlock);
+    // TODO: 设置默认账户
     web3.eth.defaultAccount = '0x38a8DC14edE1DEf9C437bB3647445eEec06fF105';
-    console.log("默认账户", web3.eth.defaultAccount);
+    console.log("默认账户=>", web3.eth.defaultAccount);
   },
   initContract_Token: () => {
     // TODO:
@@ -1223,12 +1457,14 @@ var Actions_Web3jsUtils = {
     estimateGas = this.web3.toHex(estimateGas);
     return estimateGas;
   },
+
   // 工具函数@预估区块高度
   web3_getNonce: (address) => {
     // TODO:
     let nonce = web3.eth.getTransactionCount(address);
     return nonce;
   },
+
   //工具函数@序列化私钥
   web3_bufferPrivateKey: (value) => {
     // TODO:from
@@ -1363,6 +1599,7 @@ var Actions_Web3jsUtils = {
 
     return result;
   },
+
   //工具函数@ web3js验证地址是否是合法地址 (单个地址) 3021
   web_postisAddress:(data)=>{
     console.log("工具函数@web_postisAddress的参数是：",data.address);
@@ -1381,10 +1618,13 @@ var Actions_Web3jsUtils = {
       }
       return result;
   },
+
   //工具函数@ post 0121 处理大表单数据分片以及数据校验 4052
   web3_postVerifiCation_big: (data) => {
     //输出
     let param = data;
+    // TODO: 单位
+    let unitlength = 100000000;
     console.log("web3_postVerifiCation_big..................................");
     //结果处理对象
     let result = {
@@ -1401,12 +1641,6 @@ var Actions_Web3jsUtils = {
         state:[]
       }
     }
-
-    // 01. 首先判断数据长度
-    // if (data.length <= 0) {
-    //   result.State = 3; //
-    //   return result;
-    // }
     //01. 判断数据是否为空
 
     //02. 判断地址和内容是否为空
@@ -1565,9 +1799,9 @@ var Actions_Web3jsUtils = {
        //分开追加数据
        result.sData.address.push( param[i].A);
        // TODO: 转换参数
-       let sNum = (parseFloat(param[i].B).toFixed(8))*1000000000000000000;
-       let value = web3.toBigNumber(sNum);
-       result.sData.value.push(value);
+       let sNum = (parseFloat(param[i].B).toFixed(8))*unitlength;
+       // let value = web3.toBigNumber(sNum);
+       result.sData.value.push(sNum);
      }
      //数据处理完成后，返回参数
      //处理完标志
@@ -1576,13 +1810,22 @@ var Actions_Web3jsUtils = {
 
     return result;
   },
+
   web3_cuttingunitarray: (data) => {
     // TODO:切割因子
-    console.log("ddddddddddddddddddddddddddddddddd",data);
-    let lengths = 500;
+    console.log("开始切割数组......");
+    // TODO: 分片大小，暂时给死
+    let lengths = 200;
     let data_length = data.address.length;
     console.log("长度是",data_length);
-    let arr = [];//临时数组
+    let arrbj = {
+      no:0,
+      address:"",
+      value:""
+    };//临时数组
+    let arr_address =[];
+    let arr_value = [];
+    let arr_no = [];
     let brr = [];//返回数组
 
     //首先做一个判断，条数是否相等
@@ -1595,20 +1838,42 @@ var Actions_Web3jsUtils = {
     //数据处理
     for(let i=0;i<data_length;i++){
         //
-        console.log("循环",i);
+        // console.log("循环",i);
           let is = i+1;
         if(is%lengths==0){
           //单位切割组装
           // TODO:
           //填充切割数组
           console.log("填装",i);
-          brr.push(arr);
+          brr.push({"address":arr_address,"value":arr_value});
           //清空临时数组
-          arr = [];
+          arr_address = [];
+          arr_value = [];
         }
-        arr.push(i);
+        //捕捉最后一段数据
+        if(data_length-lengths<lengths){
+          //
+          console.log("最后填装",i);
+          brr.push({"address":arr_address,"value":arr_value});
+          //清空临时数组
+          arr_address = [];
+          arr_value = [];
+          break;
         }
-        console.log("切割后的数组是：=>",brr);
+        //
+        //封装对象
+        let rowdata = {"no":i,"address":data.address[i],"value":data.value[i]};//对象拼接方法，但是不能这样拼接，因为要拆成一串，所以要追加
+        //追加
+        arr_address.push(data.address[i]);
+        arr_value.push(data.value[i]);
+        //
+
+        // arrbj.no += i;
+        // arrbj.address=data.address[i];
+        // arrbj.value = data.value[i];
+        //
+        }
+        // console.log("切割后的数组是：=>",brr);
         return brr;
   },
 
@@ -2256,7 +2521,17 @@ var Actions_Contrant_Drop = {
   D_multiSend_ed: async (data) => {
     // TODO:
     let  result;
-    let cData = data;
+    let cData = data.data;
+    let SignData;
+    //参数
+     let resultData ={
+      Sum:0,
+      Normal:0,
+      Unnormal:0,
+      Data:[],
+      unData:[]
+    };
+
     console.log("调用合约方法-Token-D_multiSend...", cData);
     let parsm = cData.data.sData;
 
@@ -2265,79 +2540,203 @@ var Actions_Contrant_Drop = {
     // console.log("D_multiSend的数据：value5878",parsm.value);
 
     // TODO: 数据分片
-    let resusltData =    Actions_Web3jsUtils.web3_cuttingunitarray(parsm);
-    console.log("切割后的数组是:",resusltData);
-    // //参数
-     let resultData ={
+    let resusltData   =   Actions_Web3jsUtils.web3_cuttingunitarray(parsm);
+    let lengths =  resusltData.length;
+    // console.log("切割后的数组是===========>",resusltData.length);
+    // console.log("切割后的数组是===========>",resusltData);
+    // console.log("切割后的数组是===========>",resusltData[0].address);
+    //  地址参数
+    let Parames_address = {
+      //合约地址
+      contractAddress: "0x66A4F55B53Cfd0563a16F40BE7EDF8A07796F692",
+      //发送者
+      fromAddress: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105",
+      //调用者
+      toAddress: "0xd2580AB2EB3313B0972e9e47b05eE4c15320A6D1"
+    }
+
+    //数据分片完成之后，然后正式对数据发送交易请求
+    // for(let i=0;i<1;i++){
+    //   //获取数据
+    //   let  address_list = resusltData[i].address;
+    //   let  value_list = resusltData[i].value;
+    //   //封装数据
+    //
+    //   let Parames_row = {
+    //     Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
+    //     Tx_gasPrice: web3.toHex((web3.eth.gasPrice)*1.2),
+    //     Tx_gasLimit: web3.toHex(800000),
+    //     Tx_from: Parames_address.fromAddress,
+    //     Tx_to: Parames_address.contractAddress,
+    //     Tx_value: "0x0",
+    //         //// TODO:
+    //     Tx_data: Contract_Drop.multiSend.getData(address_list,value_list, {
+    //     from: Parames_address.fromAddress
+    //       })
+    //   }
+    //
+    //   //对接数据
+    //   let rawTx = {
+    //     nonce: Parames_row.Tx_nonce,
+    //     gasPrice: Parames_row.Tx_gasPrice, // TODO:
+    //     gasLimit: Parames_row.Tx_gasLimit,
+    //     from: Parames_row.Tx_from,
+    //     to: Parames_row.Tx_to,
+    //     value: Parames_row.Tx_value, // TODO:
+    //     data: Parames_row.Tx_data
+    //   }
+    //
+    //   //签名编译
+    //    SignData = Actions_CommonTool.Tool_SignData({//签名
+    //       rawTx: rawTx,
+    //       key: Json_list.PRIVATEKEY.Drop_privateKey
+    //     });
+    //   // 获取签名数据,发送交易
+    //   console.log("开始发送交易",i);
+    //   // web3.eth.sendRawTransaction(SignData,(err,hash)=>{
+    //   //     if (!err){
+    //   //      console.log("返回的hash值是:",hash);
+    //   //       }else{
+    //   //      console.log("err",err);
+    //   //       }
+    //   //     });
+    //        // result = await web3.eth.sendRawTransaction(SignData);
+    //        // console.log("返回的hash是：",result);
+    // };
+
+        ///
+        //获取数据
+        let  address_list = resusltData[0].address;
+        let  value_list = resusltData[0].value;
+        //封装数据
+
+        let Parames_row = {
+          Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
+          Tx_gasPrice: web3.toHex((web3.eth.gasPrice)*1.2),
+          Tx_gasLimit: web3.toHex(800000),
+          Tx_from: Parames_address.fromAddress,
+          Tx_to: Parames_address.contractAddress,
+          Tx_value: "0x0",
+              //// TODO:
+          Tx_data: Contract_Drop.multiSend.getData(address_list,value_list, {
+          from: Parames_address.fromAddress
+            })
+        }
+
+        //对接数据
+        let rawTx = {
+          nonce: Parames_row.Tx_nonce,
+          gasPrice: Parames_row.Tx_gasPrice, // TODO:
+          gasLimit: Parames_row.Tx_gasLimit,
+          from: Parames_row.Tx_from,
+          to: Parames_row.Tx_to,
+          value: Parames_row.Tx_value, // TODO:
+          data: Parames_row.Tx_data
+        }
+
+        //签名编译
+         SignData = Actions_CommonTool.Tool_SignData({//签名
+            rawTx: rawTx,
+            key: Json_list.PRIVATEKEY.Drop_privateKey
+          });
+        // 获取签名数据,发送交易
+        // console.log("开始发送交易",i);
+        result = await web3.eth.sendRawTransaction(SignData);
+         console.log("返回的hash是：",result);
+        // web3.eth.sendRawTransaction(SignData,(err,hash)=>{
+        //     if (!err){
+        //      console.log("返回的hash值是:",hash);
+        //       }else{
+        //      console.log("err",err);
+        //       }
+        //     });
+             // result = await web3.eth.sendRawTransaction(SignData);
+             // console.log("返回的hash是：",result);
+      return result;
+  },
+
+  //批量空投测试
+  D_multiSend_Test:async(data)=>{
+    //
+    let  result;
+    let cData = data;
+    // let SignData;
+    //参数
+    //结果集
+    //参数
+    let resultData ={
       Sum:0,
       Normal:0,
       Unnormal:0,
       Data:[],
       unData:[]
     };
-    //结果集
-    // let Parames_data = {
-    //   Type: {
-    //     param1: "address _form",
-    //     param2: "address _to",
-    //     param3: "uint256 _value"
-    //   },
-    //   Value: {
-    //     param1: data.from,
-    //     param2: data.to,
-    //     param3: data.value
-    //   }
-    // }
-    // // let data;
-    // let Parames_address = {
-    //   //合约地址
-    //   contractAddress: "0x66A4F55B53Cfd0563a16F40BE7EDF8A07796F692",
-    //   //发送者
-    //   fromAddress: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105",
-    //   //调用者
-    //   toAddress: "0xd2580AB2EB3313B0972e9e47b05eE4c15320A6D1"
-    // }
-    // //序列化数据
+    // let data;
+    let Parames_address = {
+      //合约地址
+      contractAddress: "0x66A4F55B53Cfd0563a16F40BE7EDF8A07796F692",
+      //发送者
+      fromAddress: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105",
+      //调用者
+      toAddress: "0xd2580AB2EB3313B0972e9e47b05eE4c15320A6D1"
+    }
+    // console.log("调用合约方法-Token-D_multiSend_Test...", cData);
+    let parsm = cData.data.sData;
     //
-    // let Parames_row = {
-    //   Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
-    //   Tx_gasPrice: web3.toHex(web3.eth.gasPrice),
-    //   Tx_gasLimit: web3.toHex(800000),
-    //   Tx_from: Parames_address.fromAddress,
-    //   Tx_to: Parames_address.contractAddress,
-    //   Tx_value: "0x0",
-    //       //// TODO:
-    //   Tx_data: Contract_Drop.multiSend.getData(parsm.sData.address,parsm.sData.value, {
-    //   from: Parames_address.fromAddress
-    //     })
-    // }
-    //
-    //     //  05. 对接数据
-    //     let rawTx = {
-    //       nonce: Parames_row.Tx_nonce,
-    //       gasPrice: Parames_row.Tx_gasPrice, // TODO:
-    //       gasLimit: Parames_row.Tx_gasLimit,
-    //       from: Parames_row.Tx_from,
-    //       to: Parames_row.Tx_to,
-    //       value: Parames_row.Tx_value, // TODO:
-    //       data: Parames_row.Tx_data
-    //     }
-    //         // 06.签名编译
-    //         let SignData = Actions_CommonTool.Tool_SignData({//3483
-    //           rawTx: rawTx,
-    //           key: Json_list.PRIVATEKEY.Drop_privateKey
-    //         });
-    //         // result = await web3.eth.sendRawTransaction(SignData);
-    //          web3.eth.sendRawTransaction(SignData,(err,hash)=>{
-    //              if (!err){
-    //                console.log("hash-----------",hash);
-    //              }else{
-    //                console.log("err",err);
-    //              }
-    //          })
-    //
-    //         console.log("----发送交易返回数据是：",result);
-    //         return result;
+    let resusltData  = Actions_Web3jsUtils.web3_cuttingunitarray(parsm);
+    let lengths = resusltData.length;
+    //循环交易
+    for(let i = 0;i<lengths;i++){
+      //
+      let  address_list = resusltData[i].address;
+      let  value_list = resusltData[i].value;
+      // console.log("address:",address_list);
+      // console.log("value:",value_list);
+      console.log("发送块:",i);
+      //序列化数据
+      let Parames_row = {
+        Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
+        Tx_gasPrice: web3.toHex((web3.eth.gasPrice)*10),
+        Tx_gasLimit: web3.toHex(8000000),
+        Tx_from: Parames_address.fromAddress,
+        Tx_to: Parames_address.contractAddress,
+        Tx_value: "0x0",
+            //// TODO:
+        Tx_data: Contract_Drop.multiSend.getData(address_list,value_list, {
+        from: Parames_address.fromAddress
+          })
+      };
+      //
+      //  05. 对接数据
+      let rawTx = {
+        nonce: Parames_row.Tx_nonce,
+        gasPrice: Parames_row.Tx_gasPrice, // TODO:
+        gasLimit: Parames_row.Tx_gasLimit,
+        from: Parames_row.Tx_from,
+        to: Parames_row.Tx_to,
+        value: Parames_row.Tx_value, // TODO:
+        data: Parames_row.Tx_data
+      }
+          // 06.签名编译
+      let SignData = Actions_CommonTool.Tool_SignData({//3483
+            rawTx: rawTx,
+            key: Json_list.PRIVATEKEY.Drop_privateKey
+        });
+          // result = await web3.eth.sendRawTransaction(SignData);
+      web3.eth.sendRawTransaction(SignData,(err,hash)=>{
+          if (!err){
+                 console.log("hash-----------",i,hash);
+           }else{
+                 console.log("err",err);
+          }
+      });
+      console.log("----发送交易返回数据是：",i,result);
+      //sleep
+      console.log('暂停中........60秒',i);
+      await sleep(1000*60);
+      console.log("开始...",i);
+    }
+      return result;
   },
 
   /*方法说明
@@ -3072,14 +3471,14 @@ var Actions_Contrant_Drop = {
               rawTx: rawTx,
               key: Json_list.PRIVATEKEY.Drop_privateKey
             });
-            // result = await web3.eth.sendRawTransaction(SignData);
-             web3.eth.sendRawTransaction(SignData,(err,hash)=>{
-                 if (!err){
-                   console.log("hash-----------",hash);
-                 }else{
-                   console.log("err",err);
-                 }
-             })
+            result = await web3.eth.sendRawTransaction(SignData);
+             // web3.eth.sendRawTransaction(SignData,(err,hash)=>{
+             //     if (!err){
+             //       console.log("hash-----------",hash);
+             //     }else{
+             //       console.log("err",err);
+             //     }
+             // });
 
             console.log("----发送交易返回数据是：",result);
             return result;
