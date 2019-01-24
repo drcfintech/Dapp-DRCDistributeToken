@@ -2002,6 +2002,7 @@ var Actions_Web3jsUtils = {
     return result;
   },
 
+  //切割函数@
   web3_cuttingunitarray: (data) => {
     // TODO:切割因子
     console.log("开始切割数组......");
@@ -2888,7 +2889,7 @@ var Actions_Contrant_Drop = {
       }
       let Parames_row = {
         Tx_nonce: web3.toHex(nonceValue+i),
-        Tx_gasPrice: web3.toHex((web3.eth.gasPrice)*10),
+        Tx_gasPrice: web3.toHex((web3.eth.gasPrice)*1.1),
         Tx_gasLimit: web3.toHex(8000000),
         Tx_from: Parames_address.fromAddress,
         Tx_to: Parames_address.contractAddress,
@@ -2922,7 +2923,7 @@ var Actions_Contrant_Drop = {
                  console.log("err",err);
           }
       });
-      console.log("----发送交易返回数据是：",i);
+       // logger.info("----发送交易返回数据是：",i);
       //sleep
       console.log('暂停中........60秒',i);
       await sleep(1000*5);
