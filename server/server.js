@@ -2660,6 +2660,8 @@ var Actions_Contrant_Drop = {
     //
     let  result;
     let cData = data;
+    let nonceState = false;
+    let nonceValue = 0;
     // let SignData;
     //参数
     //结果集
@@ -2694,8 +2696,20 @@ var Actions_Contrant_Drop = {
       // console.log("value:",value_list);
       console.log("发送块:",i);
       //序列化数据
+      console.log("区块高度是:",web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)+i));
+      // TODO:
+      /*
+      这边要做一个特殊的处理，就是在发送交易的时候的nonce,这个nonce不能动态获取，这样的话后面nonce就会变掉， 这里的处理办法就是变量继承他的noce,然后
+      按照循环次数来累加,这样就可以解决nonce动态变化的问题
+      */
+      if (!nonceState){
+        //
+        nonceValue = web3.eth.getTransactionCount(Parames_address.fromAddress);
+            nonceState=true;
+            console.log("nonceValuelog初始化",nonceState);
+      }
       let Parames_row = {
-        Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)+1),
+        Tx_nonce: web3.toHex(nonceValue+i),
         Tx_gasPrice: web3.toHex((web3.eth.gasPrice)*10),
         Tx_gasLimit: web3.toHex(8000000),
         Tx_from: Parames_address.fromAddress,
@@ -2730,10 +2744,10 @@ var Actions_Contrant_Drop = {
                  console.log("err",err);
           }
       });
-      console.log("----发送交易返回数据是：",i,result);
+      console.log("----发送交易返回数据是：",i);
       //sleep
       console.log('暂停中........60秒',i);
-      await sleep(1000*60);
+      await sleep(1000*5);
       console.log("继续开始...",i);
     }
       return result;
