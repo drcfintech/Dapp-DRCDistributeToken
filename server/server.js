@@ -1810,12 +1810,203 @@ var Actions_Web3jsUtils = {
 
     return result;
   },
+  //工具函数 @ js 处理大表单数据校验
+  web3_postVerifiCation_big_js: (data) => {
+    //输出
+    let param = data;
+    // TODO: 单位
+    let unitlength = 100000000;
+    console.log("web3_postVerifiCation_big..................................");
+    //结果处理对象
+    let result = {
+      State: 0, //0 1 3
+      Tote: 0,
+      Valid: 0,
+      UnValid: 0,
+      ValidData: [],
+      UnValidData: [],
+      Bz: [],
+      sData:{
+        address:[],
+        value:[],
+        state:[]
+      }
+    }
+    //01. 判断数据是否为空
+
+    //02. 判断地址和内容是否为空
+/*    for (let i in param) {
+      //01.首先判断2个参数都为空
+      if ((param[i].A == null || param[i].address == undefined || param[i].address == '') && (param[i].value == null || param[i].value == undefined || param[i].value == '')) {
+        //01.如果两位数据都是空
+        result.UnValid += 1;
+        //对象保存 序号：数据
+
+        let rows = {
+          no: +param[i].no,
+          address: param[i].address,
+          value: param[i].value,
+          state: Json_list.STATES_PAR.notAddressandValue.toString()
+        }
+        // let cData = {i:param[i].no,param[i].address,param[i].value,Json_list.STATES_PAR.CheckPass}};
+        result.UnValidData.push(rows);
+        //
+        continue;
+      } else {
+        console.log("411");
+        //02. 判断地址为空的情况
+        if (param[i].address == null || param[i].address == undefined || param[i].address == '') {
+          //
+          console.log("6");
+          result.UnValid += 1;
+          //对象保存 序号：数据
+          let rows = {
+            no: +param[i].no,
+            address: param[i].address,
+            value: param[i].value,
+            state: Json_list.STATES_PAR.notAddress.toString()
+          }
+          result.UnValidData.push(rows);
+          continue;
+        } else if (param[i].value == null || param[i].value == undefined || param[i].value == '') {
+          console.log("5");
+          result.UnValidData += 1;
+          //对象保存 序号：数据
+          let rows = {
+            no: +param[i].no,
+            address: param[i].address,
+            value: param[i].value,
+            state: Json_list.STATES_PAR.notValue.toString()
+          }
+
+          result.UnValidData.push(rows);
+          continue;
+        }
+      }
+      //02. 判断地址是否合法
+
+      if (!web3.isAddress(param[i].address)) {
+        console.log("423");
+        //如果不是有效地址
+        result.UnValid += 1;
+        //对象保存 序号：数据
+        let rows = {
+          no: +param[i].no,
+          address: param[i].address,
+          value: param[i].value,
+          state: Json_list.STATES_PAR.wrongAddress.toString()
+        }
+        result.UnValidData.push(rows);
+        continue;
+      } else {
+        console.log("地址校验通过");
+        //如果是有效地址
+        result.Valid += 1;
+        //对象保存 序号：数据
+        let rows = {
+          no: +param[i].no,
+          address: param[i].address,
+          value: param[i].value,
+          state: Json_list.STATES_PAR.CheckPass.toString()
+        }
+        result.ValidData.push(rows);
+        //分开追加数据
+        result.sData.address.push( param[i].address);
+        result.sData.value.push(  parseInt(param[i].value+'00000000'));
+      }
+      //数据处理完成后，返回参数
+      //处理完标志
+      result.State = 3;
+
+    }*/
+    for (let i in param) {
+     //01.首先判断2个参数都为空
+     if ((param[i].A == null || param[i].A == undefined || param[i].A == '') && (param[i].B == null || param[i].B == undefined || param[i].B == '')) {
+       //01.如果两位数据都是空
+       result.UnValid += 1;
+       //对象保存 序号：数据
+       let rows = {
+         no: i,
+         address: param[i].A,
+         value: param[i].B,
+         state: Json_list.STATES_PAR.notAandB.toString()
+       }
+       // let cData = {i:param[i].no,param[i].A,param[i].B,Json_list.STATES_PAR.CheckPass}};
+       result.UnValidData.push(rows);
+       //
+       continue;
+     } else {
+       //02. 判断地址为空的情况
+       if (param[i].A == null || param[i].A == undefined || param[i].A == '') {
+         result.UnValid += 1;
+         //对象保存 序号：数据
+         let rows = {
+           no: i,
+           address: param[i].A,
+           value: param[i].B,
+           state: Json_list.STATES_PAR.notAddress.toString()
+         }
+         result.UnValidData.push(rows);
+         continue;
+       } else if (param[i].B == null || param[i].B == undefined || param[i].B == '') {
+         result.UnValidData += 1;
+         //对象保存 序号：数据
+         let rows = {
+           no: i,
+           address: param[i].A,
+           value: param[i].B,
+           state: Json_list.STATES_PAR.notValue.toString()
+         }
+         result.UnValidData.push(rows);
+         continue;
+       }
+     }
+     //02. 判断地址是否合法
+     if (!web3.isAddress(param[i].A)) {
+       console.log("第"+i+"合约地址不合法");
+       //如果不是有效地址
+       result.UnValid += 1;
+       //对象保存 序号：数据
+       let rows = {
+         no: i,
+         address: param[i].A,
+         value: param[i].B,
+         state: Json_list.STATES_PAR.wrongAddress.toString()
+       }
+       result.UnValidData.push(rows);
+       continue;
+     } else {
+       // console.log("地址校验通过",i);
+       //如果是有效地址
+       result.Valid += 1;
+       //对象保存 序号：数据
+       let rows = {
+         no: i,
+         address: param[i].A,
+         value: param[i].B,
+         state: Json_list.STATES_PAR.CheckPass.toString()
+       }
+       result.ValidData.push(rows);
+       //分开追加数据
+       result.sData.address.push( param[i].A);
+       // TODO: 转换参数
+       let sNum = (parseFloat(param[i].B).toFixed(8))*unitlength;
+       // let value = web3.toBigNumber(sNum);
+       result.sData.value.push(sNum);
+     }
+     //数据处理完成后，返回参数
+     //处理完标志
+     result.State = 3;
+   }
+
+    return result;
+  },
 
   web3_cuttingunitarray: (data) => {
     // TODO:切割因子
     console.log("开始切割数组......");
     // TODO: 分片大小，暂时给死
-    let lengths = 200;
+    let lengths = 300;
     let data_length = data.address.length;
     console.log("长度是",data_length);
     let arrbj = {
@@ -1837,43 +2028,33 @@ var Actions_Web3jsUtils = {
 
     //数据处理
     for(let i=0;i<data_length;i++){
-        //
-        // console.log("循环",i);
-          let is = i+1;
-        if(is%lengths==0){
+          //每次首先填装数据，然后进行判断
+          arr_address.push(data.address[i]);
+          arr_value.push(data.value[i]);
+          //
+        if(i%lengths==0 && i!=0){
           //单位切割组装
           // TODO:
           //填充切割数组
-          console.log("填装",i);
+          console.log("正常填装",i);
           brr.push({"address":arr_address,"value":arr_value});
           //清空临时数组
           arr_address = [];
           arr_value = [];
         }
+        //这边要做下处理，就是
         //捕捉最后一段数据
-        if(data_length-lengths<lengths){
-          //
+        if(i==data_length-1){
+          //如果进入，说明是数组最后一个
           console.log("最后填装",i);
           brr.push({"address":arr_address,"value":arr_value});
           //清空临时数组
           arr_address = [];
           arr_value = [];
-          break;
+          // break;
         }
-        //
-        //封装对象
-        let rowdata = {"no":i,"address":data.address[i],"value":data.value[i]};//对象拼接方法，但是不能这样拼接，因为要拆成一串，所以要追加
-        //追加
-        arr_address.push(data.address[i]);
-        arr_value.push(data.value[i]);
-        //
-
-        // arrbj.no += i;
-        // arrbj.address=data.address[i];
-        // arrbj.value = data.value[i];
-        //
         }
-        // console.log("切割后的数组是：=>",brr);
+        // console.log("切割的数组是：",brr);
         return brr;
   },
 
@@ -2664,8 +2845,6 @@ var Actions_Contrant_Drop = {
     let nonceValue = 0;
     // let SignData;
     //参数
-    //结果集
-    //参数
     let resultData ={
       Sum:0,
       Normal:0,
@@ -2696,7 +2875,6 @@ var Actions_Contrant_Drop = {
       // console.log("value:",value_list);
       console.log("发送块:",i);
       //序列化数据
-      console.log("区块高度是:",web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)+i));
       // TODO:
       /*
       这边要做一个特殊的处理，就是在发送交易的时候的nonce,这个nonce不能动态获取，这样的话后面nonce就会变掉， 这里的处理办法就是变量继承他的noce,然后
@@ -3417,15 +3595,13 @@ var Actions_Contrant_Drop = {
   },
   //闪电空投
   D_boltDrop: async (data) => {
-    // TODO:
+    //
     let  result;
     let cData = data;
-    console.log("调用合约方法-Token-D_boltDrop...", cData);
-    let parsm = cData.data;
-    console.log("D_multiSend的数据：address",parsm.address);
-    console.log("D_multiSend的数据：value",parsm.value);
-    // TODO: 切割数据
-
+    console.log("cData=============>",cData);
+    let nonceState = false;
+    let nonceValue = 0;
+    // let SignData;
     //参数
     let resultData ={
       Sum:0,
@@ -3433,19 +3609,7 @@ var Actions_Contrant_Drop = {
       Unnormal:0,
       Data:[],
       unData:[]
-    }; //结果集
-    let Parames_data = {
-      Type: {
-        param1: "address _form",
-        param2: "address _to",
-        param3: "uint256 _value"
-      },
-      Value: {
-        param1: data.from,
-        param2: data.to,
-        param3: data.value
-      }
-    }
+    };
     // let data;
     let Parames_address = {
       //合约地址
@@ -3455,48 +3619,72 @@ var Actions_Contrant_Drop = {
       //调用者
       toAddress: "0xd2580AB2EB3313B0972e9e47b05eE4c15320A6D1"
     }
-    //序列化数据
-
-    let Parames_row = {
-      Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
-      Tx_gasPrice: web3.toHex((web3.eth.gasPrice)*1.2),
-      Tx_gasLimit: web3.toHex(8000000),
-      Tx_from: Parames_address.fromAddress,
-      Tx_to: Parames_address.contractAddress,
-      Tx_value: "0x0",
-          //// TODO:
-      Tx_data: Contract_Drop.multiSend.getData(parsm.address,parsm.value, {
-      from: Parames_address.fromAddress
-        })
+    // console.log("调用合约方法-Token-D_multiSend_Test...", cData);
+    let parsm = cData.data;
+    //
+    let resusltData  = Actions_Web3jsUtils.web3_cuttingunitarray(parsm);
+    let lengths = resusltData.length;
+    //循环交易
+    for(let i = 0;i<lengths;i++){
+      //
+      let  address_list = resusltData[i].address;
+      let  value_list = resusltData[i].value;
+      console.log("发送块:",i);
+      //序列化数
+      // TODO:
+      /*
+      这边要做一个特殊的处理，就是在发送交易的时候的nonce,这个nonce不能动态获取，这样的话后面nonce就会变掉， 这里的处理办法就是变量继承他的noce,然后
+      按照循环次数来累加,这样就可以解决nonce动态变化的问题
+      */
+      if (!nonceState){
+        //
+        nonceValue = web3.eth.getTransactionCount(Parames_address.fromAddress);
+            nonceState=true;
+            console.log("nonceValuelog初始化",nonceState);
+      }
+      let Parames_row = {
+        Tx_nonce: web3.toHex(nonceValue+i),
+        Tx_gasPrice: web3.toHex((web3.eth.gasPrice)*10),
+        Tx_gasLimit: web3.toHex(8000000),
+        Tx_from: Parames_address.fromAddress,
+        Tx_to: Parames_address.contractAddress,
+        Tx_value: "0x0",
+            //// TODO:
+        Tx_data: Contract_Drop.multiSend.getData(address_list,value_list, {
+        from: Parames_address.fromAddress
+          })
+      };
+      //
+      //  05. 对接数据
+      let rawTx = {
+        nonce: Parames_row.Tx_nonce,
+        gasPrice: Parames_row.Tx_gasPrice, // TODO:
+        gasLimit: Parames_row.Tx_gasLimit,
+        from: Parames_row.Tx_from,
+        to: Parames_row.Tx_to,
+        value: Parames_row.Tx_value, // TODO:
+        data: Parames_row.Tx_data
+      }
+          // 06.签名编译
+      let SignData = Actions_CommonTool.Tool_SignData({//3483
+            rawTx: rawTx,
+            key: Json_list.PRIVATEKEY.Drop_privateKey
+        });
+          // result = await web3.eth.sendRawTransaction(SignData);
+      web3.eth.sendRawTransaction(SignData,(err,hash)=>{
+          if (!err){
+                 console.log("hash-----------",i,hash);
+           }else{
+                 console.log("err",err);
+          }
+      });
+      console.log("----发送交易返回数据是：",i);
+      //sleep
+      console.log('暂停中........60秒',i);
+      await sleep(1000*5);
+      console.log("继续开始...",i);
     }
-
-        //  05. 对接数据
-        let rawTx = {
-          nonce: Parames_row.Tx_nonce,
-          gasPrice: Parames_row.Tx_gasPrice, // TODO:
-          gasLimit: Parames_row.Tx_gasLimit,
-          from: Parames_row.Tx_from,
-          to: Parames_row.Tx_to,
-          value: Parames_row.Tx_value, // TODO:
-          data: Parames_row.Tx_data
-        }
-            // 06.签名编译
-            let SignData = Actions_CommonTool.Tool_SignData({//3483
-              rawTx: rawTx,
-              key: Json_list.PRIVATEKEY.Drop_privateKey
-            });
-            result = await web3.eth.sendRawTransaction(SignData);
-             // web3.eth.sendRawTransaction(SignData,(err,hash)=>{
-             //     if (!err){
-             //       console.log("hash-----------",hash);
-             //     }else{
-             //       console.log("err",err);
-             //     }
-             // });
-
-            console.log("----发送交易返回数据是：",result);
-            return result;
-
+      return result;
   },
   D_balanceOf: async (data) => {
     //参数

@@ -1,11 +1,37 @@
 
- let a  = false;
- if (a){
-console.log("adf");
-}else{
-console.log("dddddddddddddddddddddddd");
+let arr = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19];
+let brr = [];
+let cData = [];
+for (let i = 0;i<arr.length;i++){
+  if (i%3==0&& i!=0){
+    console.log("第",i,"次填充");
+    brr.push(cData);
+    //
+    cData = [];
+  }
+  cData.push(arr[i]);
+  console.log("arr",arr.length);
+  if (i==arr.length-1){
+    brr.push(cData);
+    //
+    cData = [];
+console.log("最后填充");
+
+  }
+  //
 
 }
+//
+console.log("------------",brr);
+
+//
+//  let a  = false;
+//  if (a){
+// console.log("adf");
+// }else{
+// console.log("dddddddddddddddddddddddd");
+//
+// }
 // router_get: () => {
 //   //首页
 //   router.get('/', (ctx, next) => {
