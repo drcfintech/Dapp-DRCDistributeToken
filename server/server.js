@@ -3071,16 +3071,98 @@ var Actions_Contrant_Drop = {
 
   //批量空投测试
   D_multiSend_Test: async (data) => {
+    // //
+    // let result;
+    // let cData = data;
+    // //参数
+    // let resultData = {
+    //   Sum: 0,
+    //   Normal: 0,
+    //   Unnormal: 0,
+    //   Data: [],
+    //   unData: []
+    // };
+    // // let data;
+    // let Parames_address = {
+    //   //合约地址
+    //   contractAddress: "0x66A4F55B53Cfd0563a16F40BE7EDF8A07796F692",
+    //   //发送者
+    //   fromAddress: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105",
+    //   //调用者
+    //   toAddress: "0xd2580AB2EB3313B0972e9e47b05eE4c15320A6D1"
+    // }
+    // // console.log("调用合约方法-Token-D_multiSend_Test...", cData);
+    // let parsm = cData.data.sData;
+    // //
+    // let resusltData = Actions_Web3jsUtils.web3_cuttingunitarray(parsm);
+    // let lengths = resusltData.length;
+    // //循环交易
+    // for (let i = 0; i < lengths; i++) {
+    //   //
+    //   let address_list = resusltData[i].address;
+    //   let value_list = resusltData[i].value;
+    //   // console.log("address:",address_list);
+    //   // console.log("value:",value_list);
+    //   console.log("发送块:", i);
+    //   //序列化数据
+    //   let Parames_row = {
+    //     Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)+i),
+    //     Tx_gasPrice: web3.toHex((web3.eth.gasPrice) * 10),
+    //     Tx_gasLimit: web3.toHex(8000000),
+    //     Tx_from: Parames_address.fromAddress,
+    //     Tx_to: Parames_address.contractAddress,
+    //     Tx_value: "0x0",
+    //     //// TODO:
+    //     Tx_data: Contract_Drop.multiSend.getData(address_list, value_list, {
+    //       from: Parames_address.fromAddress
+    //     })
+    //   };
+    //   //
+    //   //  05. 对接数据
+    //   let rawTx = {
+    //     nonce: Parames_row.Tx_nonce,
+    //     gasPrice: Parames_row.Tx_gasPrice, // TODO:
+    //     gasLimit: Parames_row.Tx_gasLimit,
+    //     from: Parames_row.Tx_from,
+    //     to: Parames_row.Tx_to,
+    //     value: Parames_row.Tx_value, // TODO:
+    //     data: Parames_row.Tx_data
+    //   }
+    //   // 06.签名编译
+    //   let SignData = Actions_CommonTool.Tool_SignData({ //3483
+    //     rawTx: rawTx,
+    //     key: Json_list.PRIVATEKEY.Drop_privateKey
+    //   });
+    //   // result = await web3.eth.sendRawTransaction(SignData);
+    //   web3.eth.sendRawTransaction(SignData, (err, hash) => {
+    //     if (!err) {
+    //       console.log("hash-----------", i, hash);
+    //     } else {
+    //       console.log("err", err);
+    //     }
+    //   });
+    //   console.log("----发送交易返回数据是：", i, result);
+    //   //sleep
+    //   console.log('暂停中........60秒', i);
+    //   await sleep(1000 * 60);
+    //   console.log("开始...", i);
+    // }
+    // return result;
     //
-    let result;
+    let  result;
     let cData = data;
+    let nonceState = false;
+    let nonceValue = 0;
+    // let SignData;
     //参数
-    let resultData = {
-      Sum: 0,
-      Normal: 0,
-      Unnormal: 0,
-      Data: [],
-      unData: []
+    //结果集
+    //参数
+    let resultData ={
+      Sum:0,
+      Normal:0,
+      Unnormal:0,
+      Data:[],
+      unData:[]
     };
     // let data;
     let Parames_address = {
@@ -3094,28 +3176,40 @@ var Actions_Contrant_Drop = {
     // console.log("调用合约方法-Token-D_multiSend_Test...", cData);
     let parsm = cData.data.sData;
     //
-    let resusltData = Actions_Web3jsUtils.web3_cuttingunitarray(parsm);
+    let resusltData  = Actions_Web3jsUtils.web3_cuttingunitarray(parsm);
     let lengths = resusltData.length;
     //循环交易
-    for (let i = 0; i < lengths; i++) {
+    for(let i = 0;i<lengths;i++){
       //
-      let address_list = resusltData[i].address;
-      let value_list = resusltData[i].value;
+      let  address_list = resusltData[i].address;
+      let  value_list = resusltData[i].value;
       // console.log("address:",address_list);
       // console.log("value:",value_list);
-      console.log("发送块:", i);
+      console.log("发送块:",i);
       //序列化数据
+      console.log("区块高度是:",web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)+i));
+      // TODO:
+      /*
+      这边要做一个特殊的处理，就是在发送交易的时候的nonce,这个nonce不能动态获取，这样的话后面nonce就会变掉， 这里的处理办法就是变量继承他的noce,然后
+      按照循环次数来累加,这样就可以解决nonce动态变化的问题
+      */
+      if (!nonceState){
+        //
+        nonceValue = web3.eth.getTransactionCount(Parames_address.fromAddress);
+            nonceState=true;
+            console.log("nonceValuelog初始化",nonceState);
+      }
       let Parames_row = {
-        Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)+i),
-        Tx_gasPrice: web3.toHex((web3.eth.gasPrice) * 10),
+        Tx_nonce: web3.toHex(nonceValue+i),
+        Tx_gasPrice: web3.toHex((web3.eth.gasPrice)*10),
         Tx_gasLimit: web3.toHex(8000000),
         Tx_from: Parames_address.fromAddress,
         Tx_to: Parames_address.contractAddress,
         Tx_value: "0x0",
-        //// TODO:
-        Tx_data: Contract_Drop.multiSend.getData(address_list, value_list, {
-          from: Parames_address.fromAddress
-        })
+            //// TODO:
+        Tx_data: Contract_Drop.multiSend.getData(address_list,value_list, {
+        from: Parames_address.fromAddress
+          })
       };
       //
       //  05. 对接数据
@@ -3128,26 +3222,26 @@ var Actions_Contrant_Drop = {
         value: Parames_row.Tx_value, // TODO:
         data: Parames_row.Tx_data
       }
-      // 06.签名编译
-      let SignData = Actions_CommonTool.Tool_SignData({ //3483
-        rawTx: rawTx,
-        key: Json_list.PRIVATEKEY.Drop_privateKey
+          // 06.签名编译
+      let SignData = Actions_CommonTool.Tool_SignData({//3483
+            rawTx: rawTx,
+            key: Json_list.PRIVATEKEY.Drop_privateKey
+        });
+          // result = await web3.eth.sendRawTransaction(SignData);
+      web3.eth.sendRawTransaction(SignData,(err,hash)=>{
+          if (!err){
+                 console.log("hash-----------",i,hash);
+           }else{
+                 console.log("err",err);
+          }
       });
-      // result = await web3.eth.sendRawTransaction(SignData);
-      web3.eth.sendRawTransaction(SignData, (err, hash) => {
-        if (!err) {
-          console.log("hash-----------", i, hash);
-        } else {
-          console.log("err", err);
-        }
-      });
-      console.log("----发送交易返回数据是：", i, result);
+      console.log("----发送交易返回数据是：",i);
       //sleep
-      console.log('暂停中........60秒', i);
-      await sleep(1000 * 60);
-      console.log("开始...", i);
+      console.log('暂停中........60秒',i);
+      await sleep(1000*5);
+      console.log("继续开始...",i);
     }
-    return result;
+      return result;
   },
 
   /**方法说明
