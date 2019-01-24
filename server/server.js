@@ -2200,76 +2200,56 @@ var Actions_Web3jsUtils = {
     // TODO:切割因子
     console.log("开始切割数组......");
     // TODO: 分片大小，暂时给死
-    let lengths = 200;
+    let lengths = 3;
     let data_length = data.address.length;
-    console.log("长度是", data_length);
+    console.log("长度是",data_length);
     let arrbj = {
-      no: 0,
-      address: "",
-      value: ""
-    }; //临时数组
-    let arr_address = [];
+      no:0,
+      address:"",
+      value:""
+    };//临时数组
+    let arr_address =[];
     let arr_value = [];
     let arr_no = [];
-    let brr = []; //返回数组
+    let brr = [];//返回数组
 
     //首先做一个判断，条数是否相等
-    if (data.address.length != data.value.length) {
-      //如果两个参数数量不同，直接返回
-      console.log("参数数量不同");
-      return;
+    if (data.address.length != data.value.length){
+        //如果两个参数数量不同，直接返回
+        console.log("参数数量不同");
+          return;
     }
 
     //数据处理
-    for (let i = 0; i < data_length; i++) {
-      //
-      // console.log("循环",i);
-      let is = i + 1;
-      if (is % lengths == 0) {
-        //单位切割组装
-        // TODO:
-        //填充切割数组
-        console.log("填装", i);
-        brr.push({
-          "address": arr_address,
-          "value": arr_value
-        });
-        //清空临时数组
-        arr_address = [];
-        arr_value = [];
-      }
-      //捕捉最后一段数据
-      if (data_length - lengths < lengths) {
-        //
-        console.log("最后填装", i);
-        brr.push({
-          "address": arr_address,
-          "value": arr_value
-        });
-        //清空临时数组
-        arr_address = [];
-        arr_value = [];
-        break;
-      }
-      //
-      //封装对象
-      let rowdata = {
-        "no": i,
-        "address": data.address[i],
-        "value": data.value[i]
-      }; //对象拼接方法，但是不能这样拼接，因为要拆成一串，所以要追加
-      //追加
-      arr_address.push(data.address[i]);
-      arr_value.push(data.value[i]);
-      //
-
-      // arrbj.no += i;
-      // arrbj.address=data.address[i];
-      // arrbj.value = data.value[i];
-      //
-    }
-    // console.log("切割后的数组是：=>",brr);
-    return brr;
+    for(let i=0;i<data_length;i++){
+          //每次首先填装数据，然后进行判断
+          arr_address.push(data.address[i]);
+          arr_value.push(data.value[i]);
+          //
+        if(i%lengths==0 && i!=0){
+          //单位切割组装
+          // TODO:
+          //填充切割数组
+          console.log("正常填装",i);
+          brr.push({"address":arr_address,"value":arr_value});
+          //清空临时数组
+          arr_address = [];
+          arr_value = [];
+        }
+        //这边要做下处理，就是
+        //捕捉最后一段数据
+        if(i==data_length-1){
+          //如果进入，说明是数组最后一个
+          console.log("最后填装",i);
+          brr.push({"address":arr_address,"value":arr_value});
+          //清空临时数组
+          arr_address = [];
+          arr_value = [];
+          // break;
+        }
+        }
+        // console.log("切割的数组是：",brr);
+        return brr;
   },
 
   /**
@@ -3958,85 +3938,96 @@ var Actions_Contrant_Drop = {
 
   //闪电空投
   D_boltDrop: async (data) => {
-    // TODO:
-    let result;
-    let cData = data;
-    console.log("调用合约方法-Token-D_boltDrop...", cData);
-    let parsm = cData.data;
-    console.log("D_multiSend的数据：address", parsm.address);
-    console.log("D_multiSend的数据：value", parsm.value);
-    // TODO: 切割数据
-
-    //参数
-    let resultData = {
-      Sum: 0,
-      Normal: 0,
-      Unnormal: 0,
-      Data: [],
-      unData: []
-    }; //结果集
-    let Parames_data = {
-      Type: {
-        param1: "address _form",
-        param2: "address _to",
-        param3: "uint256 _value"
-      },
-      Value: {
-        param1: data.from,
-        param2: data.to,
-        param3: data.value
-      }
-    }
-    // let data;
-    let Parames_address = {
-      //合约地址
-      contractAddress: "0x66A4F55B53Cfd0563a16F40BE7EDF8A07796F692",
-      //发送者
-      fromAddress: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105",
-      //调用者
-      toAddress: "0xd2580AB2EB3313B0972e9e47b05eE4c15320A6D1"
-    }
-    //序列化数据
-
-    let Parames_row = {
-      Tx_nonce: web3.toHex(web3.eth.getTransactionCount(Parames_address.fromAddress)),
-      Tx_gasPrice: web3.toHex((web3.eth.gasPrice) * 1.2),
-      Tx_gasLimit: web3.toHex(8000000),
-      Tx_from: Parames_address.fromAddress,
-      Tx_to: Parames_address.contractAddress,
-      Tx_value: "0x0",
-      //// TODO:
-      Tx_data: Contract_Drop.multiSend.getData(parsm.address, parsm.value, {
-        from: Parames_address.fromAddress
-      })
-    }
-
-    //  05. 对接数据
-    let rawTx = {
-      nonce: Parames_row.Tx_nonce,
-      gasPrice: Parames_row.Tx_gasPrice, // TODO:
-      gasLimit: Parames_row.Tx_gasLimit,
-      from: Parames_row.Tx_from,
-      to: Parames_row.Tx_to,
-      value: Parames_row.Tx_value, // TODO:
-      data: Parames_row.Tx_data
-    }
-    // 06.签名编译
-    let SignData = Actions_CommonTool.Tool_SignData({ //3483
-      rawTx: rawTx,
-      key: Json_list.PRIVATEKEY.Drop_privateKey
-    });
-    result = await web3.eth.sendRawTransaction(SignData);
-    // web3.eth.sendRawTransaction(SignData,(err,hash)=>{
-    //     if (!err){
-    //       console.log("hash-----------",hash);
-    //     }else{
-    //       console.log("err",err);
-    //     }
-    // });
-
-    console.log("----发送交易返回数据是：", result);
-    return result;
+    //
+     let  result;
+     let cData = data;
+     console.log("cData=============>",cData);
+     let nonceState = false;
+     let nonceValue = 0;
+     // let SignData;
+     //参数
+     let resultData ={
+       Sum:0,
+       Normal:0,
+       Unnormal:0,
+       Data:[],
+       unData:[]
+     };
+     // let data;
+     let Parames_address = {
+       //合约地址
+       contractAddress: "0x66A4F55B53Cfd0563a16F40BE7EDF8A07796F692",
+       //发送者
+       fromAddress: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105",
+       //调用者
+       toAddress: "0xd2580AB2EB3313B0972e9e47b05eE4c15320A6D1"
+     }
+     // console.log("调用合约方法-Token-D_multiSend_Test...", cData);
+     let parsm = cData.data;
+     //
+     let resusltData  = Actions_Web3jsUtils.web3_cuttingunitarray(parsm);
+     let lengths = resusltData.length;
+     //循环交易
+     for(let i = 0;i<lengths;i++){
+       //
+       let  address_list = resusltData[i].address;
+       let  value_list = resusltData[i].value;
+       console.log("发送块:",i);
+       //序列化数
+       // TODO:
+       /*
+       这边要做一个特殊的处理，就是在发送交易的时候的nonce,这个nonce不能动态获取，这样的话后面nonce就会变掉， 这里的处理办法就是变量继承他的noce,然后
+       按照循环次数来累加,这样就可以解决nonce动态变化的问题
+       */
+       if (!nonceState){
+         //
+         nonceValue = web3.eth.getTransactionCount(Parames_address.fromAddress);
+             nonceState=true;
+             console.log("nonceValuelog初始化",nonceState);
+       }
+       let Parames_row = {
+         Tx_nonce: web3.toHex(nonceValue+i),
+         Tx_gasPrice: web3.toHex((web3.eth.gasPrice)*10),
+         Tx_gasLimit: web3.toHex(8000000),
+         Tx_from: Parames_address.fromAddress,
+         Tx_to: Parames_address.contractAddress,
+         Tx_value: "0x0",
+             //// TODO:
+         Tx_data: Contract_Drop.multiSend.getData(address_list,value_list, {
+         from: Parames_address.fromAddress
+           })
+       };
+       //
+       //  05. 对接数据
+       let rawTx = {
+         nonce: Parames_row.Tx_nonce,
+         gasPrice: Parames_row.Tx_gasPrice, // TODO:
+         gasLimit: Parames_row.Tx_gasLimit,
+         from: Parames_row.Tx_from,
+         to: Parames_row.Tx_to,
+         value: Parames_row.Tx_value, // TODO:
+         data: Parames_row.Tx_data
+       }
+           // 06.签名编译
+       let SignData = Actions_CommonTool.Tool_SignData({//3483
+             rawTx: rawTx,
+             key: Json_list.PRIVATEKEY.Drop_privateKey
+         });
+           // result = await web3.eth.sendRawTransaction(SignData);
+       web3.eth.sendRawTransaction(SignData,(err,hash)=>{
+           if (!err){
+                  console.log("hash-----------",i,hash);
+            }else{
+                  console.log("err",err);
+           }
+       });
+       console.log("----发送交易返回数据是：",i);
+       //sleep
+       console.log('暂停中........60秒',i);
+       await sleep(1000*5);
+       console.log("继续开始...",i);
+     }
+       return result;
 
   },
 
