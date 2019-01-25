@@ -14,6 +14,7 @@ const convert = require('koa-convert');
 const Tx = require('ethereumjs-tx');
 const sleep = require("sleep-promise");
 const log4js = require('log4js');
+const schedule = require('node-schedule');//定时器
 //json
 const walletConfig = require('./walletConfig.json');
 // const esponceData = require("./responceData.js");
@@ -30,6 +31,7 @@ var web3 = new Web3();
 var Contract_Token;
 var Contract_Drop;
 var Contract_TokenMgr;
+const logger = log4js.getLogger();
 /*方法说明
  *@method 方法名
  *@for 所属类名
@@ -77,7 +79,7 @@ var Actions_Koa = {
     //   ctx.body = ctx.request.body;
     // });
 
-    const logger = log4js.getLogger();
+
     logger.level = 'info';
     log4js.configure({
       appenders: {
@@ -129,6 +131,29 @@ var Actions_Router = {
     /**
     代币测试
     */
+
+
+
+    //测试
+    router.get('/Token/T_testback', (ctx, next) => {
+      // TODO:校验数据
+      // let sFrom = Json_list.ADDRESS_TOKEN;
+      let num ="22";
+      deploy = async (data, next) => {
+        let result = await Actions_Contrant_Drop.D_multiSend_Listening({
+          from: data,
+          to: data,
+          value: data
+        });
+        console.log("1111=>", result);
+        return result;
+      }
+      //结果返回
+      deploy(num).then(res => {
+        ctx.body = "调用tranfer结果是=>" + res;
+      });
+    });
+
 
     /**
    * @get{方式发起 代币合约的transferFrom交易}
@@ -2929,6 +2954,169 @@ var Actions_Contrant_Drop = {
       await sleep(1000*5);
       console.log("继续开始...",i);
     }
+      return result;
+  },
+
+  //测试监听交易
+  D_multiSend_Listening:async(data)=>{
+    //参数初始化
+
+    //定时器初始化
+    var rule = new schedule.RecurrenceRule();
+    rule.second = [0,10,20,30,40,50];
+    //轮询对象初始化
+    let PollingData ={
+      totalSum:10,
+      selectNum:5,
+      yesNum:0,
+      yesLog:[],
+      errNum:0,
+      errLog:[],
+      state:0 ,
+      hash:[],
+      Data:[]
+      // 0,2
+    }
+
+    //测试数据
+   let  result = 0;
+   let unitlength = 8;
+   let value1 = 1.2;
+   let value2 = 1.3;
+   let sNum1 = (parseFloat(value1).toFixed(8))*unitlength;
+   let sNum2 = (parseFloat(value2).toFixed(8))*unitlength;
+   let s_address = ['0xb775a1ba2b3017d89096f830959a3d95d674bac9','0x3fa90a1eb7340f8abd18e91bdd277b3629fcd414'];
+   let s_value   = [sNum1,sNum2];
+   //地址
+   let Parames_address = {
+     //合约地址
+     contractAddress: "0x66A4F55B53Cfd0563a16F40BE7EDF8A07796F692",
+     //发送者
+     fromAddress: "0x38a8DC14edE1DEf9C437bB3647445eEec06fF105",
+     //调用者
+     toAddress: "0xd2580AB2EB3313B0972e9e47b05eE4c15320A6D1"
+   }
+
+   let noncetest = web3.eth.getTransactionCount(Parames_address.fromAddress);
+   //对接数据
+   let Parames_row = {
+     Tx_nonce: web3.toHex(noncetest),
+     Tx_gasPrice: web3.toHex((web3.eth.gasPrice)*20),
+     Tx_gasLimit: web3.toHex(8000000),
+     Tx_from: Parames_address.fromAddress,
+     Tx_to: Parames_address.contractAddress,
+     Tx_value: "0x0",
+         //// TODO:
+     Tx_data: Contract_Drop.multiSend.getData(s_address,s_value, {
+     from: Parames_address.fromAddress
+       })
+   };
+   let rawTx = {
+     nonce: Parames_row.Tx_nonce,
+     gasPrice: Parames_row.Tx_gasPrice, // TODO:
+     gasLimit: Parames_row.Tx_gasLimit,
+     from: Parames_row.Tx_from,
+     to: Parames_row.Tx_to,
+     value: Parames_row.Tx_value, // TODO:
+     data: Parames_row.Tx_data
+   };
+   //私钥签名
+   let SignData = Actions_CommonTool.Tool_SignData({
+     rawTx: rawTx,
+     key: Json_list.PRIVATEKEY.Drop_privateKey
+   });
+
+   //发送交易
+  const func_sendTx =(data)=>{
+  let p = new Promise((resolve,reject)=>{
+     web3.eth.sendRawTransaction(data,(err,hash)=>{
+       if(!err){
+          resolve(hash);
+       }else{
+         reject(err);
+        }
+     });
+  });
+  return p;
+};
+  //等待确认
+  const func_waitokTx =(data)=>{
+    let p = new Promise((resolve,reject)=>{
+      web3.eth.getTransaction(data,(res)=>{
+        resolve(res);
+      });
+    });
+return p;
+};
+//获取交易信息
+const func_getTxmessage=(data)=>{
+//
+ logger.info("要查找的hash是：",data);
+let p = new Promise((resolve,reject)=>{
+  //get tx
+  // let  data1 = "0x767b005871a627b286b4d0e17e9ea6bfe5a4cbef67dc76be8dba4a9a1469539a";
+  web3.eth.getTransactionReceipt(data,(err,resData)=>{
+    if (!err){
+        if(resData == null || resData == undefined || resData == ''){
+          //如果查询交易信息为空,说明还在等待旷工打包中
+        reject(resData);
+    }else{
+      //说明获取成功,判断其状态
+      resolve(resData);
+      //if  交易.state !=3  ;write  log
+      //这里还有一个逻辑要处理，就是交易失败的话，区块高度会不会变
+    }
+}else{
+  reject(err);
+    }
+  }
+);
+});
+return p;
+};
+
+//发送交易
+func_sendTx(SignData).then((re)=>{
+  logger.info("交易发送成功,其中hash值是:",re);
+      //hash获取成功后,存入对象中
+      PollingData.hash[0] = re;
+},(err)=>{
+  logger.info("发送交易失败：",err);
+  //
+    // PollingData.Data[i] = err;\
+    PollingData.Data[0] = err;
+});
+
+//开始监听
+let j = schedule.scheduleJob(rule,()=>{
+  //
+  logger.info("轮询中......");
+  //循环获取交易，首先获取 hash 循环获取
+  let  hash1 = PollingData.hash[0];
+  // let  hash1 = "0x767b005871a627b286b4d0e17e9ea6bfe5a4cbef67dc76be8dba4a9a1469539a";
+  logger.info("获取的hash:",hash1);
+  //然后根据hash值去请求交易信息
+  func_getTxmessage(hash1).then((data)=>{
+      //如果走这里，说明 已经获取交易信息，输出
+    logger.info("交易信息是：",data.status);
+      //处理 状态是否成功，成功记录， 失败记录， log,已经 对应的fNo,
+
+      // TODO:
+      PollingData.state = 3;
+      logger.info("对象中的状态是：",PollingData.state);
+    },(err)=>{
+      //交易正在等待打包.....
+    logger.info("交易正在等待打包.....",err);
+  });
+
+
+  //这是轮询的处理
+  logger.info("开始跳出判断",PollingData.state);
+  if(PollingData.state == 3){
+    logger.info("轮询结束....");
+    j.cancel();
+  }
+});
       return result;
   },
 
