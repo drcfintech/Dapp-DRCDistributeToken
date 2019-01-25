@@ -27,6 +27,7 @@ const UR_DrcToken = require('../contractAbi/DrcToken.json');
 
 const app = new Koa();
 var web3 = new Web3();
+
 //init contractname
 var Contract_Token;
 var Contract_Drop;
@@ -81,15 +82,21 @@ var Actions_Koa = {
 
 
     logger.level = 'info';
-    log4js.configure({
-      appenders: {
-        out: { type: 'stdout' },//设置是否在控制台打印日志
-        info: { type: 'file', filename: '../logs/info.log' }
-      },
-      categories: {
-        default: { appenders: [ 'out', 'info' ], level: 'info' }//去掉'out'。控制台不打印日志
-      }
-    });
+    var c = new Date();
+    var myDate = new Date();
+    var mytime=myDate.toLocaleDateString();
+    let sfileName = '../logs/'+'info-'+mytime+'.log';
+  log4js.configure({
+    appenders: {
+      out: { type: 'stdout' },//设置是否在控制台打印日志
+      info: { type: 'file', filename: sfileName}
+    },
+    categories: {
+      default: { appenders: [ 'out', 'info' ], level: 'info' }//去掉'out'。控制台不打印日志
+    }
+  });
+    //
+
     app.use(convert(bodyParser({
         enableTypes:['json', 'form', 'text'],
         formLimit:"10mb",
@@ -2897,9 +2904,9 @@ var Actions_Contrant_Drop = {
       //
       let  address_list = resusltData[i].address;
       let  value_list = resusltData[i].value;
-      // console.log("address:",address_list);
-      // console.log("value:",value_list);
-      console.log("发送块:",i);
+      //
+
+      logger.info("发送块:",i);
       //序列化数据
       // TODO:
       /*
@@ -2910,11 +2917,12 @@ var Actions_Contrant_Drop = {
         //
         nonceValue = web3.eth.getTransactionCount(Parames_address.fromAddress);
             nonceState=true;
-            console.log("nonceValuelog初始化",nonceState);
+                logger.info("nonceValuelog初始化",nonceState);
+
       }
       let Parames_row = {
         Tx_nonce: web3.toHex(nonceValue+i),
-        Tx_gasPrice: web3.toHex((web3.eth.gasPrice)*1.1),
+        Tx_gasPrice: web3.toHex((web3.eth.gasPrice)*1),
         Tx_gasLimit: web3.toHex(8000000),
         Tx_from: Parames_address.fromAddress,
         Tx_to: Parames_address.contractAddress,
@@ -3818,7 +3826,7 @@ let j = schedule.scheduleJob(rule,()=>{
       //
       let  address_list = resusltData[i].address;
       let  value_list = resusltData[i].value;
-      console.log("发送块:",i);
+      logger.info("发送块:",i);
       //序列化数
       // TODO:
       /*
@@ -3862,9 +3870,9 @@ let j = schedule.scheduleJob(rule,()=>{
           // result = await web3.eth.sendRawTransaction(SignData);
       web3.eth.sendRawTransaction(SignData,(err,hash)=>{
           if (!err){
-                 console.log("hash-----------",i,hash);
+                      logger.info("hash--=>",i,hash);
            }else{
-                 console.log("err",err);
+                 logger.info("err",err);
           }
       });
       console.log("----发送交易返回数据是：",i);
@@ -4841,6 +4849,7 @@ var Actions_Starting = {
 var Actions = {
   //Action 启动其它函数
   init: (data) => {
+
     Actions_Koa.render();
     Actions_Koa.user();
     //
